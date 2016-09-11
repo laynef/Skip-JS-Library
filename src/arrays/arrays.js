@@ -19,19 +19,19 @@ To chain with others
 
 // clear
 
-Array.prototype.clear = function() {
+Array.prototype.cnClear = function() {
   return [];
 }
 
 // compact
 
-Array.prototype.compact = function() {
+Array.prototype.cnCompact = function() {
   return this.filter(function(x) { return Number(x) !== 0; });
 }
 
 // remove
 
-Array.prototype.remove = function(calls, index) {
+Array.prototype.cnRemove = function(calls, index) {
   var args, func, newArr = [];
   if (typeof arguments[0] !== 'function') {
     args = Array.from(arguments);
@@ -61,13 +61,15 @@ Array.prototype.remove = function(calls, index) {
 
 // geo (map only indexs)
 
-Array.prototype.geo = function(calls, index) {
-  var newArr = [];
+Array.prototype.cnMap = function(calls, index) {
+  var newArr = [], args;
   var calls = arguments[0];
-  var args = Array.from(arguments).slice(1);
+  if (arguments.length === 1)  { args = Array.from(arguments).slice(1); }
 
   for (var i = 0; i < this.length; i++) {
-    if (args.includes(i)) {
+    if (args.includes(i) && args !== undefined) {
+      newArr.push(calls(this[i]));
+    } else if (args === undefined) {
       newArr.push(calls(this[i]));
     } else {
       newArr.push(this[i]);
@@ -79,12 +81,76 @@ Array.prototype.geo = function(calls, index) {
 
 // atIndex
 
-Array.prototype.atIndex = function(in) {
-  if (in === undefined) { in = 0; }
-  if (in > this.length || in < 0) {
+Array.prototype.cnAtIndex = function(inn) {
+  if (inn === undefined) { inn = 0; }
+  if (inn > this.length || inn < 0) {
     return console.error('invalid index atIndex');
   }
-  return this[in];
+  return this[inn];
 }
 
-// 
+// REVIEW: check
+// concat this before alg ???
+
+Array.prototype.cnConcatMap = function(calls, index) {
+  var newArr = [];
+  var calls = arguments[0];
+  var args = Array.from(arguments).slice(1);
+
+  for (var i = 0; i < this.length; i++) {
+    if (args.includes(i)) {
+      newArr.push(calls(this[i]));
+    } else {
+      newArr.push(this[i]);
+    }
+  }
+  // check concat
+  return newArr.concat(this);
+};
+
+// check
+
+Array.prototype.cnCheck = function(calls, index) {
+  var call = arguments[0];
+  var args = Array.from(arguments).slice(1);
+  var bool = true;
+
+  for (var i = 0 ; i < this.length; i++) {
+    if (args.includes(i) && !call(i)) {
+      bool = false;
+    }
+  }
+
+  return bool;
+}
+
+// each
+
+Array.prototype.cnEach = function(calls, index) {
+  var call = arguments[0];
+  var args = Array.from(arguments).slice(1);
+
+  for (var i = 0; i < this.length; i++) {
+    if (args.includes(i)) {
+      call(this[i]);
+    }
+  }
+}
+
+// find
+
+Array.prototype.cnFind = function(callback, time) {
+  var inn = time === undefined ? 1 : time;
+  var ph = 0;
+
+  for (var i = 0; i < this.length; i++) {
+    if (callback(this[i])) {
+      ph++;
+      if (ph === inn) {
+        return this[i];
+      }
+    }
+  }
+
+  return undefined;
+}
