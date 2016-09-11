@@ -3,7 +3,7 @@
 * @Date:   09-09-2016
 * @Email:  laynefaler@gmail.com
 * @Last modified by:   laynefaler
-* @Last modified time: 09-10-2016
+* @Last modified time: 09-11-2016
 */
 
 /*
@@ -124,14 +124,16 @@ Array.prototype.cnCheck = function(calls, index) {
   return bool;
 }
 
-// each
+// forEach
 
-Array.prototype.cnEach = function(calls, index) {
+Array.prototype.cnForEach = function(calls, index) {
   var call = arguments[0];
   var args = Array.from(arguments).slice(1);
 
   for (var i = 0; i < this.length; i++) {
-    if (args.includes(i)) {
+    if (args === undefined) {
+      call(this[i]);
+    } else if (args.includes(i)) {
       call(this[i]);
     }
   }
@@ -154,3 +156,5 @@ Array.prototype.cnFind = function(callback, time) {
 
   return undefined;
 }
+
+// 
