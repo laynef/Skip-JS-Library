@@ -3,7 +3,7 @@
 * @Date:   09-09-2016
 * @Email:  laynefaler@gmail.com
 * @Last modified by:   laynefaler
-* @Last modified time: 09-11-2016
+* @Last modified time: 09-12-2016
 */
 
 /*
@@ -59,7 +59,7 @@ Array.prototype.cnRemove = function(calls, index) {
   }
 }
 
-// geo (map only indexs)
+// map
 
 Array.prototype.cnMap = function(calls, index) {
   var newArr = [], args;
@@ -81,6 +81,7 @@ Array.prototype.cnMap = function(calls, index) {
 
 // atIndex
 
+// TODO: negatives
 Array.prototype.cnAtIndex = function(inn) {
   if (inn === undefined) { inn = 0; }
   if (inn > this.length || inn < 0) {
@@ -198,4 +199,144 @@ Array.prototype.cnFlatten = function() {
     }
   }
   return res;
+}
+
+// max
+
+Array.prototype.cnMax = function() {
+  return this.sort(function(a,b) { return a-b; })[this.length-1];
+}
+
+// min
+
+Array.prototype.cnMin = function() {
+  return this.sort(function(a,b) { return a-b; })[0];
+}
+
+// lastIndexOf
+
+Array.prototype.cnLastIndexOf = function(num) {
+  for (var i = this.length-1; i >= 0; i--) {
+    if (this[i] === num) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+// take
+
+Array.prototype.cnTake = function(num) {
+  var arr = []; num = num === undefined ? 1 : num;
+  if (num < 0) {
+    num *= -1;
+    if (num > this.length) { return this; }
+    for (var i = this.length-1; i >= (i-num); i--) {
+      arr.push(this[i]);
+    }
+    return arr;
+  } else if (num === 0) {
+    return this;
+  } else {
+    if (num > this.length) { return this; }
+    for (var i = 0; i < num; i++) {
+      arr.push(this[i]);
+    }
+    return arr;
+  }
+}
+
+// intersection
+
+Array.prototype.cnIntersection = function() {
+  return this.reduce(function(acc, item) {
+
+  });
+}
+
+// union
+// difference
+// uniq
+
+Array.prototype.cnUniq = function() {
+  return this.filter(function(ele, i, arr) {
+    return arr.indexOf(ele) === i;
+  });
+}
+
+// sortUniq
+
+Array.prototype.cnSortedUniq = function() {
+  return this.sort().filter(function(e,i,a) {
+    return a.indexOf(e) === i;
+  });
+}
+
+// zip
+// unzip
+// sortedIndex
+// findLastIndex
+// range
+// popOff
+
+Array.prototype.cnPopOff = function() {
+  this.pop();
+  return this;
+}
+
+// shiftOff
+
+Array.prototype.cnShiftOff = function() {
+  this.shift();
+  return this;
+}
+
+// object
+
+Array.prototype.cnObject = function() {
+
+}
+
+// flatMap
+
+Array.prototype.cnFlatMap = function(call) {
+  return this.cnFlatten().map(call);
+}
+
+// sample
+
+Array.prototype.cnSample = function() {
+  return this[Math.random() * this.length];
+}
+
+// randomShuffle
+
+Array.prototype.cnRandomShuffle = function() {
+  return this.sort(function(a,b) { return Math.random(a) - Math.random(b); });
+}
+
+// shuffle
+
+// REVIEW: test
+Array.prototype.cnShuffle = function(num) {
+  var arr = [];
+  if (num < 0) {
+    num *= -1;
+    for (var i = this.length-1; i >= num; i--) {
+      arr.push(this[i]);
+    }
+    for (var i = 0; i <= num; i++) {
+      arr.push(this[i]);
+    }
+  } else if (num === 0) {
+    return this;
+  } else {
+    for (var i = num; i < this.length; i++) {
+      arr.push(this[i]);
+    }
+    for (var i = 0; i <= num; i++) {
+      arr.push(this[i]);
+    }
+    return arr;
+  }
 }
