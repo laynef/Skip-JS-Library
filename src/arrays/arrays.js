@@ -248,14 +248,30 @@ Array.prototype.cnTake = function(num) {
 
 // intersection
 
-Array.prototype.cnIntersection = function() {
+Array.prototype.cnIntersection = function(calls) {
+  if (calls === undefined) { calls = function(x) { return x; } }
   return this.reduce(function(acc, item) {
-
-  });
+    item.cnUniq().forEach(function(x) {
+      if (!acc.includes(calls(x))) {
+        acc.push(x)
+      }
+    })
+    return acc;
+  },[]);
 }
 
 // union
+
+Array.prototype.cnUnion = function(calls) {
+  if (calls === undefined) { calls = function(x) { return x; } }
+}
+
 // difference
+
+Array.prototype.cnDifference = function(calls) {
+  if (calls === undefined) { calls = function(x) { return x; } }
+}
+
 // uniq
 
 Array.prototype.cnUniq = function() {
@@ -273,10 +289,17 @@ Array.prototype.cnSortedUniq = function() {
 }
 
 // zip
+
+Array.prototype.cnZip = function() {
+
+}
+
+// zipObject
 // unzip
 // sortedIndex
 // findLastIndex
 // range
+
 // popOff
 
 Array.prototype.cnPopOff = function() {
@@ -299,8 +322,8 @@ Array.prototype.cnObject = function() {
 
 // flatMap
 
-Array.prototype.cnFlatMap = function(call) {
-  return this.cnFlatten().map(call);
+Array.prototype.cnFlatMap = function(args) {
+  return this.cnFlatten().cnMap(args);
 }
 
 // sample
