@@ -68,9 +68,9 @@ Array.prototype.cnMap = function(calls, index) {
 
   for (var i = 0; i < this.length; i++) {
     if (args.includes(i) && args !== undefined) {
-      newArr.push(calls(this[i]));
+      newArr.push(calls(this[i], i, this));
     } else if (args === undefined) {
-      newArr.push(calls(this[i]));
+      newArr.push(calls(this[i], i, this));
     } else {
       newArr.push(this[i]);
     }
@@ -99,7 +99,7 @@ Array.prototype.cnConcatMap = function(calls, index) {
 
   for (var i = 0; i < this.length; i++) {
     if (args.includes(i)) {
-      newArr.push(calls(this[i]));
+      newArr.push(calls(this[i], i, this));
     } else {
       newArr.push(this[i]);
     }
@@ -116,7 +116,7 @@ Array.prototype.cnCheck = function(calls, index) {
   var bool = true;
 
   for (var i = 0 ; i < this.length; i++) {
-    if (args.includes(i) && !call(i)) {
+    if (args.includes(i) && !call(this[i], i, this)) {
       bool = false;
     }
   }
@@ -132,9 +132,9 @@ Array.prototype.cnForEach = function(calls, index) {
 
   for (var i = 0; i < this.length; i++) {
     if (args === undefined) {
-      call(this[i]);
+      call(this[i], i, this);
     } else if (args.includes(i)) {
-      call(this[i]);
+      call(this[i], i, this);
     }
   }
 }
@@ -146,7 +146,7 @@ Array.prototype.cnFind = function(callback, time) {
   var ph = 0;
 
   for (var i = 0; i < this.length; i++) {
-    if (callback(this[i])) {
+    if (callback(this[i], i, this)) {
       ph++;
       if (ph === inn) {
         return this[i];
@@ -157,4 +157,45 @@ Array.prototype.cnFind = function(callback, time) {
   return undefined;
 }
 
-// 
+// rightReduce
+
+Array.prototype.cnRightReduce = function(call, initial) {
+  initial = initial === undefined ? this.pop() : initial;
+  for (var i = this.length; i >= 0; i--) {
+    initial = call(initial, this[i], i, this);
+  }
+  return initial;
+}
+
+// chuck
+
+Array.prototype.cnChunk = function(num) {
+  num = num === undefined ? 1 : num;
+  if (num < 0 || num > this.length) {
+    return console.error('invalid parameter for cnChunk');
+  }
+
+  var origin = [];
+  for (var i = 0; i < this.length; i+=num) {
+    var arr = [];
+    for (var j = i; j < num+i; j++) {
+      arr.push(this[j]);
+    }
+    origin.push(arr);
+  }
+  return origin;
+}
+
+// flatten
+
+Array.prototype.cnFlatten = function() {
+  var res = [];
+  for (var i = 0; i < this.length; i++) {
+    if (!Array.isArray(this[i])) {
+      res.push(this[i]);
+    } else {
+      res = res.concat(cnFlatten(this[i]));
+    }
+  }
+  return res;
+}
