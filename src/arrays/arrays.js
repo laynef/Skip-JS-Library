@@ -363,3 +363,18 @@ Array.prototype.cnShuffle = function(num) {
     return arr;
   }
 }
+
+// push
+
+Array.prototype.cnPush = function(item, index) {
+  index = index === undefined ? this.length : index;
+  if (index < 0) {
+
+  } else if (index === 0) {
+
+  } else {
+    
+  }
+}
+
+console.log([1,2,3].cnPush(4));
