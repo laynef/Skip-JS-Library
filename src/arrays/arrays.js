@@ -59,25 +59,7 @@ Array.prototype.cnRemove = function(calls, index) {
   }
 }
 
-// map
 
-Array.prototype.cnMap = function(calls, index) {
-  var newArr = [], args;
-  var calls = arguments[0];
-  if (arguments.length === 1)  { args = Array.from(arguments).slice(1); }
-
-  for (var i = 0; i < this.length; i++) {
-    if (args.includes(i) && args !== undefined) {
-      newArr.push(calls(this[i], i, this));
-    } else if (args === undefined) {
-      newArr.push(calls(this[i], i, this));
-    } else {
-      newArr.push(this[i]);
-    }
-  }
-
-  return newArr;
-}
 
 // atIndex
 
@@ -109,37 +91,6 @@ Array.prototype.cnConcatMap = function(calls, index) {
   return newArr.concat(this);
 };
 
-// check
-
-Array.prototype.cnCheck = function(calls, index) {
-  var call = arguments[0];
-  var args = Array.from(arguments).slice(1);
-  var bool = true;
-
-  for (var i = 0 ; i < this.length; i++) {
-    if (args.includes(i) && !call(this[i], i, this)) {
-      bool = false;
-    }
-  }
-
-  return bool;
-}
-
-// forEach
-
-Array.prototype.cnForEach = function(calls, index) {
-  var call = arguments[0];
-  var args = Array.from(arguments).slice(1);
-
-  for (var i = 0; i < this.length; i++) {
-    if (args === undefined) {
-      call(this[i], i, this);
-    } else if (args.includes(i)) {
-      call(this[i], i, this);
-    }
-  }
-}
-
 // find
 
 Array.prototype.cnFind = function(callback, time) {
@@ -156,16 +107,6 @@ Array.prototype.cnFind = function(callback, time) {
   }
 
   return undefined;
-}
-
-// rightReduce
-
-Array.prototype.cnRightReduce = function(call, initial) {
-  initial = initial === undefined ? this.pop() : initial;
-  for (var i = this.length; i >= 0; i--) {
-    initial = call(initial, this[i], i, this);
-  }
-  return initial;
 }
 
 // chuck
@@ -185,43 +126,6 @@ Array.prototype.cnChunk = function(num) {
     origin.push(arr);
   }
   return origin;
-}
-
-// flatten
-
-Array.prototype.cnFlatten = function() {
-  var res = [];
-  for (var i = 0; i < this.length; i++) {
-    if (!Array.isArray(this[i])) {
-      res.push(this[i]);
-    } else {
-      res = res.concat(cnFlatten(this[i]));
-    }
-  }
-  return res;
-}
-
-// max
-
-Array.prototype.cnMax = function() {
-  return this.sort(function(a,b) { return a-b; })[this.length-1];
-}
-
-// min
-
-Array.prototype.cnMin = function() {
-  return this.sort(function(a,b) { return a-b; })[0];
-}
-
-// lastIndexOf
-
-Array.prototype.cnLastIndexOf = function(num) {
-  for (var i = this.length-1; i >= 0; i--) {
-    if (this[i] === num) {
-      return i;
-    }
-  }
-  return -1;
 }
 
 // take
@@ -300,20 +204,6 @@ Array.prototype.cnZip = function() {
 // findLastIndex
 // range
 
-// popOff
-
-Array.prototype.cnPopOff = function() {
-  this.pop();
-  return this;
-}
-
-// shiftOff
-
-Array.prototype.cnShiftOff = function() {
-  this.shift();
-  return this;
-}
-
 // object
 
 Array.prototype.cnObject = function() {
@@ -324,12 +214,6 @@ Array.prototype.cnObject = function() {
 
 Array.prototype.cnFlatMap = function(args) {
   return this.cnFlatten().cnMap(args);
-}
-
-// sample
-
-Array.prototype.cnSample = function() {
-  return this[Math.random() * this.length];
 }
 
 // randomShuffle
@@ -363,18 +247,3 @@ Array.prototype.cnShuffle = function(num) {
     return arr;
   }
 }
-
-// push
-
-Array.prototype.cnPush = function(item, index) {
-  index = index === undefined ? this.length : index;
-  if (index < 0) {
-
-  } else if (index === 0) {
-
-  } else {
-
-  }
-}
-
-console.log([1,2,3].cnPush(4));

@@ -23,6 +23,26 @@ Array.prototype.cnClear = function() {
   return [];
 }
 
+// cnPopOff
+
+Array.prototype.cnPopOff = function() {
+  this.pop();
+  return this;
+}
+
+// cnShiftOff
+
+Array.prototype.cnShiftOff = function() {
+  this.shift();
+  return this;
+}
+
+// cnSample
+
+Array.prototype.cnSample = function() {
+  return this[Math.random() * this.length];
+}
+
 // cnPush
 
 Array.prototype.cnPush = function(item, index) {
@@ -59,6 +79,21 @@ Array.prototype.cnForEach = function(callback, indexs) {
   }
 }
 
+// cnRightForEach
+
+Array.prototype.cnRightForEach = function(callback, indexs) {
+  var calls = arguments[0];
+  var others = Array.from(arguments).slice(1);
+
+  for (var i = this.length-1; i >= 0; i--) {
+    if (args === undefined) {
+      call(this[i], i, this);
+    } else if (args.includes(i)) {
+      call(this[i], i, this);
+    }
+  }
+}
+
 // cnMap
 
 Array.prototype.cnMap = function(callback,indexs) {
@@ -85,4 +120,67 @@ Array.prototype.cnFilter = function(callback,indexs) {
     }
   }, others);
   return arr;
+}
+
+// cnFlatten
+
+Array.prototype.cnFlatten = function() {
+  var res = [];
+  this.cnForEach(function(e,i,a) {
+    if (!Array.isArray(e)) {
+      res.push(e);
+    } else {
+      res = res.concat(cnFlatten(e));
+    }
+  });
+  return res;
+}
+
+// cnMax
+
+Array.prototype.cnMax = function() {
+  return this.sort(function(a,b) { return a-b; })[this.length-1];
+}
+
+// cnMin
+
+Array.prototype.cnMin = function() {
+  return this.sort(function(a,b) { return a-b; })[0];
+}
+
+// cnLastIndexOf
+
+Array.prototype.cnLastIndexOf = function(num) {
+  for (var i = this.length-1; i >= 0; i--) {
+    if (this[i] === num) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+// cnRightReduce
+
+Array.prototype.cnRightReduce = function(call, initial) {
+  initial = initial === undefined ? this.pop() : initial;
+  for (var i = this.length; i >= 0; i--) {
+    initial = call(initial, this[i], i, this);
+  }
+  return initial;
+}
+
+// check
+
+Array.prototype.cnCheck = function(calls, index) {
+  var call = arguments[0];
+  var args = Array.from(arguments).slice(1);
+  var bool = true;
+
+  this.cnForEach(function(e,i,a) {
+    if (args.includes(i) && !call(e, i, a)) {
+      bool = false;
+    }
+  });
+
+  return bool;
 }
