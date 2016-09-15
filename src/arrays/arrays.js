@@ -17,18 +17,6 @@ To chain with others
 
 */
 
-// clear
-
-Array.prototype.cnClear = function() {
-  return [];
-}
-
-// compact
-
-Array.prototype.cnCompact = function() {
-  return this.filter(function(x) { return Number(x) !== 0; });
-}
-
 // remove
 
 Array.prototype.cnRemove = function(calls, index) {
@@ -59,75 +47,6 @@ Array.prototype.cnRemove = function(calls, index) {
   }
 }
 
-
-
-// atIndex
-
-// TODO: negatives
-Array.prototype.cnAtIndex = function(inn) {
-  if (inn === undefined) { inn = 0; }
-  if (inn > this.length || inn < 0) {
-    return console.error('invalid index atIndex');
-  }
-  return this[inn];
-}
-
-// REVIEW: check
-// concat this before alg ???
-
-Array.prototype.cnConcatMap = function(calls, index) {
-  var newArr = [];
-  var calls = arguments[0];
-  var args = Array.from(arguments).slice(1);
-
-  for (var i = 0; i < this.length; i++) {
-    if (args.includes(i)) {
-      newArr.push(calls(this[i], i, this));
-    } else {
-      newArr.push(this[i]);
-    }
-  }
-  // check concat
-  return newArr.concat(this);
-};
-
-// find
-
-Array.prototype.cnFind = function(callback, time) {
-  var inn = time === undefined ? 1 : time;
-  var ph = 0;
-
-  for (var i = 0; i < this.length; i++) {
-    if (callback(this[i], i, this)) {
-      ph++;
-      if (ph === inn) {
-        return this[i];
-      }
-    }
-  }
-
-  return undefined;
-}
-
-// chuck
-
-Array.prototype.cnChunk = function(num) {
-  num = num === undefined ? 1 : num;
-  if (num < 0 || num > this.length) {
-    return console.error('invalid parameter for cnChunk');
-  }
-
-  var origin = [];
-  for (var i = 0; i < this.length; i+=num) {
-    var arr = [];
-    for (var j = i; j < num+i; j++) {
-      arr.push(this[j]);
-    }
-    origin.push(arr);
-  }
-  return origin;
-}
-
 // take
 
 Array.prototype.cnTake = function(num) {
@@ -150,20 +69,6 @@ Array.prototype.cnTake = function(num) {
   }
 }
 
-// intersection
-
-Array.prototype.cnIntersection = function(calls) {
-  if (calls === undefined) { calls = function(x) { return x; } }
-  return this.reduce(function(acc, item) {
-    item.cnUniq().forEach(function(x) {
-      if (!acc.includes(calls(x))) {
-        acc.push(x)
-      }
-    })
-    return acc;
-  },[]);
-}
-
 // union
 
 Array.prototype.cnUnion = function(calls) {
@@ -174,22 +79,6 @@ Array.prototype.cnUnion = function(calls) {
 
 Array.prototype.cnDifference = function(calls) {
   if (calls === undefined) { calls = function(x) { return x; } }
-}
-
-// uniq
-
-Array.prototype.cnUniq = function() {
-  return this.filter(function(ele, i, arr) {
-    return arr.indexOf(ele) === i;
-  });
-}
-
-// sortUniq
-
-Array.prototype.cnSortedUniq = function() {
-  return this.sort().filter(function(e,i,a) {
-    return a.indexOf(e) === i;
-  });
 }
 
 // zip
@@ -208,18 +97,6 @@ Array.prototype.cnZip = function() {
 
 Array.prototype.cnObject = function() {
 
-}
-
-// flatMap
-
-Array.prototype.cnFlatMap = function(args) {
-  return this.cnFlatten().cnMap(args);
-}
-
-// randomShuffle
-
-Array.prototype.cnRandomShuffle = function() {
-  return this.sort(function(a,b) { return Math.random(a) - Math.random(b); });
 }
 
 // shuffle

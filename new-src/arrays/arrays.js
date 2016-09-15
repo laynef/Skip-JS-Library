@@ -169,7 +169,7 @@ Array.prototype.cnRightReduce = function(call, initial) {
   return initial;
 }
 
-// check
+// cnCheck
 
 Array.prototype.cnCheck = function(calls, index) {
   var call = arguments[0];
@@ -183,4 +183,111 @@ Array.prototype.cnCheck = function(calls, index) {
   });
 
   return bool;
+}
+
+// cnFind
+
+Array.prototype.cnFind = function(callback, time) {
+  var inn = time === undefined ? 1 : time;
+  var ph = 0;
+
+  this.cnForEach(function(e,i,a) {
+    if (callback(e,i,a)) {
+      ph++;
+      if (ph === inn) {
+        return e;
+      }
+    }
+  });
+
+  return undefined;
+}
+
+// cnUniq
+
+Array.prototype.cnUniq = function() {
+  return this.filter(function(ele, i, arr) {
+    return arr.indexOf(ele) === i;
+  });
+}
+
+// cnSortedUniq
+
+Array.prototype.cnSortedUniq = function() {
+  return this.sort().filter(function(e,i,a) {
+    return a.indexOf(e) === i;
+  });
+}
+
+// cnChunk
+
+Array.prototype.cnChunk = function(num) {
+  num = num === undefined ? 1 : num;
+  if (num < 0 || num > this.length) {
+    return console.error('invalid parameter for cnChunk');
+  }
+
+  var origin = [];
+  for (var i = 0; i < this.length; i+=num) {
+    var arr = [];
+    for (var j = i; j < num+i; j++) {
+      arr.push(this[j]);
+    }
+    origin.push(arr);
+  }
+  return origin;
+}
+
+// cnConcatMap
+
+Array.prototype.cnConcatMap = function(calls, index) {
+  var arr = this.cnMap(arguments);
+  return arr.concat(this);
+};
+
+// cnAtIndex
+
+Array.prototype.cnAtIndex = function(inn) {
+  if (inn === undefined) { inn = 0; }
+  if (inn > this.length || inn < -this.length) {
+    return console.error('invalid index atIndex');
+  }
+  if (inn > 0) {
+    return this[inn];
+  } else {
+    var zombie = this.length + inn;
+    return this[zombie];
+  }
+}
+
+// cnIntersection
+
+Array.prototype.cnIntersection = function(calls) {
+  if (calls === undefined) { calls = function(x) { return x; } }
+  return this.reduce(function(acc, item) {
+    item.cnUniq().forEach(function(x) {
+      if (!acc.includes(calls(x))) {
+        acc.push(x)
+      }
+    })
+    return acc;
+  },[]);
+}
+
+// cnRandomShuffle
+
+Array.prototype.cnRandomShuffle = function() {
+  return this.sort(function(a,b) { return Math.random(a) - Math.random(b); });
+}
+
+// cnFlatMap
+
+Array.prototype.cnFlatMap = function(args) {
+  return this.cnFlatten().cnMap(args);
+}
+
+// cnCompact
+
+Array.prototype.cnCompact = function() {
+  return this.filter(function(x) { return Number(x) !== 0; });
 }
