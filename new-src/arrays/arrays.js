@@ -79,6 +79,16 @@ Array.prototype.cnForEach = function(callback, indexs) {
   }
 }
 
+// cnClip
+
+Array.prototype.cnClip = function(indexs) {
+  var indie = Array.from(arguments);
+  for (var i = 0; i < indie.length; i++) {
+    this.splice(indie[i],1);
+  }
+  return this;
+}
+
 // cnRightForEach
 
 Array.prototype.cnRightForEach = function(callback, indexs) {
@@ -120,6 +130,16 @@ Array.prototype.cnFilter = function(callback,indexs) {
     }
   }, others);
   return arr;
+}
+
+// cnReject
+
+Array.prototype.cnReject = function(args) {
+  var others = Array.from(arguments).slice(1);
+  var calls = arguments[0];
+  return this.cnFilter(function(x) {
+    return !calls(x);
+  }, others);
 }
 
 // cnFlatten
