@@ -185,27 +185,27 @@ Array.prototype.cnLastIndexOf = function(num) {
 // cnRightReduce
 
 Array.prototype.cnRightReduce = function(call, initial, indexs) {
-  initial = initial === undefined ? this.pop() : initial;
+  init = arguments[1] === undefined ? this.pop() : arguments[1];
   var call = arguments[0], others;
   if (arguments.length > 2 && arguments[2] !== undefined) {
     others = Array.from(arguments).slice(2);
   this.cnRightForEach(function(e,i,a) {
-    initial = call(initial, e, i, a);
+    init = call(init, e, i, a);
   }, others);
-  return initial;
+  return init;
 }
 
 // cnReduce
 
 Array.prototype.cnReduce = function(call, initial, indexs) {
-  var initial = initial === undefined ? this.pop() : initial;
+  var init = arguments[1] === undefined ? this.pop() : arguments[1];
   var call = arguments[0], others;
   if (arguments.length > 2 && arguments[2] !== undefined) {
     others = Array.from(arguments).slice(2);
   this.cnForEach(function(e,i,a) {
-    initial = call(initial, e, i, a);
+    init = call(init, e, i, a);
   }, others);
-  return initial;
+  return init;
 }
 
 // cnCheck
@@ -335,7 +335,9 @@ Array.prototype.cnIntersection = function(calls, indexs) {
 // cnRandomShuffle
 
 Array.prototype.cnRandomShuffle = function() {
-  return this.sort(function(a,b) { return Math.floor(Math.random(a)) - Math.floor(Math.random(b)); });
+  return this.sort(function(a,b) {
+    return Math.floor(Math.random(a)) - Math.floor(Math.random(b));
+  });
 }
 
 // shuffle
