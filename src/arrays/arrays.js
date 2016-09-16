@@ -188,7 +188,7 @@ Array.prototype.cnRightReduce = function(call, initial, indexs) {
   initial = initial === undefined ? this.pop() : initial;
   var call = arguments[0], others;
   if (arguments.length > 2 && arguments[2] !== undefined) {
-    others = Array.from(this).slice(1);
+    others = Array.from(this).slice(2);
   this.cnRightForEach(function(e,i,a) {
     initial = call(initial, e, i, a);
   }, others);
@@ -197,11 +197,11 @@ Array.prototype.cnRightReduce = function(call, initial, indexs) {
 
 // cnReduce
 
-Array.prototype.cnRightReduce = function(call, initial, indexs) {
+Array.prototype.cnReduce = function(call, initial, indexs) {
   initial = initial === undefined ? this.pop() : initial;
   var call = arguments[0], others;
   if (arguments.length > 2 && arguments[2] !== undefined) {
-    others = Array.from(this).slice(1);
+    others = Array.from(this).slice(2);
   this.cnForEach(function(e,i,a) {
     initial = call(initial, e, i, a);
   }, others);
