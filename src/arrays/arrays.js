@@ -234,7 +234,7 @@ Array.prototype.cnFind = function(callback, time) {
 
   var call = arguments[0], others;
   if (arguments.length > 2 && arguments[2] !== undefined) {
-    others = Array.from(this).slice(1);
+    others = Array.from(this).slice(2);
   }
 
   this.cnForEach(function(e,i,a) {
