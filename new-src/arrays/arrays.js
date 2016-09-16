@@ -133,13 +133,13 @@ Array.prototype.cnClip = function(indexs) {
   });
 }
 
-console.log([1,2,3,4,5].cnClip(1,2));
-
 // cnReject
 
 Array.prototype.cnReject = function(args) {
-  var others = Array.from(arguments).slice(1);
-  var calls = arguments[0];
+  var call = arguments[0], others;
+  if (arguments.length > 1 && arguments[1] !== undefined) {
+    others = Array.from(this).slice(1);
+  }
   return this.cnFilter(function(x) {
     return !calls(x);
   }, others);
@@ -184,26 +184,44 @@ Array.prototype.cnLastIndexOf = function(num) {
 
 // cnRightReduce
 
-Array.prototype.cnRightReduce = function(call, initial) {
+Array.prototype.cnRightReduce = function(call, initial, indexs) {
   initial = initial === undefined ? this.pop() : initial;
+  var call = arguments[0], others;
+  if (arguments.length > 2 && arguments[2] !== undefined) {
+    others = Array.from(this).slice(1);
   this.cnRightForEach(function(e,i,a) {
     initial = call(initial, e, i, a);
-  });
+  }, others);
+  return initial;
+}
+
+// cnReduce
+
+Array.prototype.cnRightReduce = function(call, initial, indexs) {
+  initial = initial === undefined ? this.pop() : initial;
+  var call = arguments[0], others;
+  if (arguments.length > 2 && arguments[2] !== undefined) {
+    others = Array.from(this).slice(1);
+  this.cnForEach(function(e,i,a) {
+    initial = call(initial, e, i, a);
+  }, others);
   return initial;
 }
 
 // cnCheck
 
 Array.prototype.cnCheck = function(calls, index) {
-  var call = arguments[0];
-  var args = Array.from(arguments).slice(1);
+  var call = arguments[0], others;
+  if (arguments.length > 1 && arguments[1] !== undefined) {
+    others = Array.from(this).slice(1);
+  }
   var bool = true;
 
   this.cnForEach(function(e,i,a) {
-    if (args.includes(i) && !call(e, i, a)) {
+    if (!call(e, i, a)) {
       bool = false;
     }
-  });
+  }, others);
 
   return bool;
 }
@@ -214,6 +232,11 @@ Array.prototype.cnFind = function(callback, time) {
   var inn = time === undefined ? 1 : time;
   var ph = 0;
 
+  var call = arguments[0], others;
+  if (arguments.length > 2 && arguments[2] !== undefined) {
+    others = Array.from(this).slice(1);
+  }
+
   this.cnForEach(function(e,i,a) {
     if (callback(e,i,a)) {
       ph++;
@@ -221,7 +244,7 @@ Array.prototype.cnFind = function(callback, time) {
         return e;
       }
     }
-  });
+  }, others);
 
   return undefined;
 }
@@ -229,17 +252,25 @@ Array.prototype.cnFind = function(callback, time) {
 // cnUniq
 
 Array.prototype.cnUniq = function() {
-  return this.filter(function(ele, i, arr) {
+  var call = arguments[0], others;
+  if (arguments.length > 1 && arguments[1] !== undefined) {
+    others = Array.from(this).slice(1);
+  }
+  return this.cnFilter(function(ele, i, arr) {
     return arr.indexOf(ele) === i;
-  });
+  }, others);
 }
 
 // cnSortedUniq
 
 Array.prototype.cnSortedUniq = function() {
-  return this.sort().filter(function(e,i,a) {
+  var call = arguments[0], others;
+  if (arguments.length > 1 && arguments[1] !== undefined) {
+    others = Array.from(this).slice(1);
+  }
+  return this.sort().cnFilter(function(e,i,a) {
     return a.indexOf(e) === i;
-  });
+  }, others);
 }
 
 // cnChunk
@@ -285,16 +316,20 @@ Array.prototype.cnAtIndex = function(inn) {
 
 // cnIntersection
 
-Array.prototype.cnIntersection = function(calls) {
+Array.prototype.cnIntersection = function(calls, indexs) {
+  var call = arguments[0], others;
+  if (arguments.length > 1 && arguments[1] !== undefined) {
+    others = Array.from(this).slice(1);
+  }
   if (calls === undefined) { calls = function(x) { return x; } }
-  return this.reduce(function(acc, item) {
+  return this.cnReduce(function(acc, item) {
     item.cnUniq().forEach(function(x) {
       if (!acc.includes(calls(x))) {
         acc.push(x)
       }
     })
     return acc;
-  },[]);
+  },[], others);
 }
 
 // cnRandomShuffle
@@ -311,6 +346,6 @@ Array.prototype.cnFlatMap = function(args) {
 
 // cnCompact
 
-Array.prototype.cnCompact = function() {
-  return this.filter(function(x) { return Number(x) !== 0; });
+Array.prototype.cnCompact = function(indexs) {
+  return this.cnFilter(function(x) { return Number(x) !== 0; }, arguments);
 }
