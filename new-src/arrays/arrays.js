@@ -3,7 +3,7 @@
 * @Date:   09-09-2016
 * @Email:  laynefaler@gmail.com
 * @Last modified by:   laynefaler
-* @Last modified time: 09-15-2016
+* @Last modified time: 09-16-2016
 */
 
 /*
@@ -67,8 +67,10 @@ Array.prototype.cnPush = function(item, index) {
 // cnForEach
 
 Array.prototype.cnForEach = function(callback, indexs) {
-  var calls = arguments[0];
-  var others = Array.from(arguments).slice(1);
+  var call = arguments[0], args;
+  if (arguments.length > 1 && arguments[1] !== undefined) {
+    args = Array.from(this).slice(1);
+  }
 
   for (var i = 0; i < this.length; i++) {
     if (args === undefined) {
@@ -79,24 +81,16 @@ Array.prototype.cnForEach = function(callback, indexs) {
   }
 }
 
-// cnClip
-
-Array.prototype.cnClip = function(indexs) {
-  var indie = Array.from(arguments);
-  for (var i = 0; i < indie.length; i++) {
-    this.splice(indie[i],1);
-  }
-  return this;
-}
-
 // cnRightForEach
 
 Array.prototype.cnRightForEach = function(callback, indexs) {
-  var calls = arguments[0];
-  var others = Array.from(arguments).slice(1);
+  var call = arguments[0], args;
+  if (arguments.length > 1 && arguments[1] !== undefined) {
+    args = Array.from(this).slice(1);
+  }
 
   for (var i = this.length-1; i >= 0; i--) {
-    if (args === undefined) {
+    if (args.length === 0) {
       call(this[i], i, this);
     } else if (args.includes(i)) {
       call(this[i], i, this);
@@ -107,10 +101,9 @@ Array.prototype.cnRightForEach = function(callback, indexs) {
 // cnMap
 
 Array.prototype.cnMap = function(callback,indexs) {
-    var arr = [];
-    var others = Array.from(arguments).slice(1);
+    var arr = [], others;
     var calls = arguments[0];
-
+    if (arguments.length > 1) { others = Array.from(arguments).slice(1); }
     this.cnForEach(function(e,i,a) {
       arr.push(calls(e,i,a));
     }, others);
@@ -120,10 +113,9 @@ Array.prototype.cnMap = function(callback,indexs) {
 // cnFilter
 
 Array.prototype.cnFilter = function(callback,indexs) {
-  var arr = [];
-  var others = Array.from(arguments).slice(1);
+  var arr = [], others;
   var calls = arguments[0];
-
+  if (arguments.length > 1) { others = Array.from(arguments).slice(1); }
   this.cnForEach(function(e,i,a) {
     if (calls(e,i,a)) {
       arr.push(e);
@@ -131,6 +123,17 @@ Array.prototype.cnFilter = function(callback,indexs) {
   }, others);
   return arr;
 }
+
+// cnClip
+
+Array.prototype.cnClip = function(indexs) {
+  var indie = Array.from(arguments);
+  return this.cnFilter(function(e,i,a) {
+    return !indie.includes(i);
+  });
+}
+
+console.log([1,2,3,4,5].cnClip(1,2));
 
 // cnReject
 
@@ -183,9 +186,9 @@ Array.prototype.cnLastIndexOf = function(num) {
 
 Array.prototype.cnRightReduce = function(call, initial) {
   initial = initial === undefined ? this.pop() : initial;
-  for (var i = this.length; i >= 0; i--) {
-    initial = call(initial, this[i], i, this);
-  }
+  this.cnRightForEach(function(e,i,a) {
+    initial = call(initial, e, i, a);
+  });
   return initial;
 }
 
