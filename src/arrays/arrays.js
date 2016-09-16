@@ -69,7 +69,7 @@ Array.prototype.cnPush = function(item, index) {
 Array.prototype.cnForEach = function(callback, indexs) {
   var call = arguments[0], args;
   if (arguments.length > 1 && arguments[1] !== undefined) {
-    args = Array.from(this).slice(1);
+    args = Array.from(arguments).slice(1);
   }
 
   for (var i = 0; i < this.length; i++) {
@@ -86,7 +86,7 @@ Array.prototype.cnForEach = function(callback, indexs) {
 Array.prototype.cnRightForEach = function(callback, indexs) {
   var call = arguments[0], args;
   if (arguments.length > 1 && arguments[1] !== undefined) {
-    args = Array.from(this).slice(1);
+    args = Array.from(arguments).slice(1);
   }
 
   for (var i = this.length-1; i >= 0; i--) {
@@ -138,7 +138,7 @@ Array.prototype.cnClip = function(indexs) {
 Array.prototype.cnReject = function(args) {
   var call = arguments[0], others;
   if (arguments.length > 1 && arguments[1] !== undefined) {
-    others = Array.from(this).slice(1);
+    others = Array.from(arguments).slice(1);
   }
   return this.cnFilter(function(x) {
     return !calls(x);
@@ -188,7 +188,7 @@ Array.prototype.cnRightReduce = function(call, initial, indexs) {
   initial = initial === undefined ? this.pop() : initial;
   var call = arguments[0], others;
   if (arguments.length > 2 && arguments[2] !== undefined) {
-    others = Array.from(this).slice(2);
+    others = Array.from(arguments).slice(2);
   this.cnRightForEach(function(e,i,a) {
     initial = call(initial, e, i, a);
   }, others);
@@ -198,10 +198,10 @@ Array.prototype.cnRightReduce = function(call, initial, indexs) {
 // cnReduce
 
 Array.prototype.cnReduce = function(call, initial, indexs) {
-  initial = initial === undefined ? this.pop() : initial;
+  var initial = initial === undefined ? this.pop() : initial;
   var call = arguments[0], others;
   if (arguments.length > 2 && arguments[2] !== undefined) {
-    others = Array.from(this).slice(2);
+    others = Array.from(arguments).slice(2);
   this.cnForEach(function(e,i,a) {
     initial = call(initial, e, i, a);
   }, others);
@@ -213,7 +213,7 @@ Array.prototype.cnReduce = function(call, initial, indexs) {
 Array.prototype.cnCheck = function(calls, index) {
   var call = arguments[0], others;
   if (arguments.length > 1 && arguments[1] !== undefined) {
-    others = Array.from(this).slice(1);
+    others = Array.from(arguments).slice(1);
   }
   var bool = true;
 
@@ -234,7 +234,7 @@ Array.prototype.cnFind = function(callback, time) {
 
   var call = arguments[0], others;
   if (arguments.length > 2 && arguments[2] !== undefined) {
-    others = Array.from(this).slice(2);
+    others = Array.from(arguments).slice(2);
   }
 
   this.cnForEach(function(e,i,a) {
@@ -254,7 +254,7 @@ Array.prototype.cnFind = function(callback, time) {
 Array.prototype.cnUniq = function() {
   var call = arguments[0], others;
   if (arguments.length > 1 && arguments[1] !== undefined) {
-    others = Array.from(this).slice(1);
+    others = Array.from(arguments).slice(1);
   }
   return this.cnFilter(function(ele, i, arr) {
     return arr.indexOf(ele) === i;
@@ -266,7 +266,7 @@ Array.prototype.cnUniq = function() {
 Array.prototype.cnSortedUniq = function() {
   var call = arguments[0], others;
   if (arguments.length > 1 && arguments[1] !== undefined) {
-    others = Array.from(this).slice(1);
+    others = Array.from(arguments).slice(1);
   }
   return this.sort().cnFilter(function(e,i,a) {
     return a.indexOf(e) === i;
@@ -319,7 +319,7 @@ Array.prototype.cnAtIndex = function(inn) {
 Array.prototype.cnIntersection = function(calls, indexs) {
   var call = arguments[0], others;
   if (arguments.length > 1 && arguments[1] !== undefined) {
-    others = Array.from(this).slice(1);
+    others = Array.from(arguments).slice(1);
   }
   if (calls === undefined) { calls = function(x) { return x; } }
   return this.cnReduce(function(acc, item) {
@@ -327,7 +327,7 @@ Array.prototype.cnIntersection = function(calls, indexs) {
       if (!acc.includes(calls(x))) {
         acc.push(x)
       }
-    })
+    });
     return acc;
   },[], others);
 }
@@ -335,18 +335,18 @@ Array.prototype.cnIntersection = function(calls, indexs) {
 // cnRandomShuffle
 
 Array.prototype.cnRandomShuffle = function() {
-  return this.sort(function(a,b) { return Math.random(a) - Math.random(b); });
+  return this.sort(function(a,b) { return Math.floor(Math.random(a)) - Math.floor(Math.random(b)); });
 }
 
 // shuffle
 
 Array.prototype.cnShuffle = function(num) {
   var arr = [];
-  if (num > this.length-1 || -this.length+1 > num) {
+  if ((num > this.length-1) || (-this.length+1 > num)) {
     return console.error('invalid number');
   }
   if (num < 0) {
-    var newer = this.length + num;
+    var newer = this.length - (num * -1);
     for (var i = newer; i < this.length; i++) {
       arr.push(this[i]);
     }
@@ -370,7 +370,7 @@ Array.prototype.cnShuffle = function(num) {
 // cnFlatMap
 
 Array.prototype.cnFlatMap = function(args) {
-  return this.cnFlatten().cnMap(args);
+  return this.cnFlatten().cnMap(arguments);
 }
 
 // cnCompact
