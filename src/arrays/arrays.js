@@ -40,7 +40,7 @@ Array.prototype.cnShiftOff = function() {
 // cnSample
 
 Array.prototype.cnSample = function() {
-  return this[Math.random() * this.length];
+  return this[Math.floor(Math.random() * this.length)];
 }
 
 // cnPush
@@ -189,6 +189,7 @@ Array.prototype.cnRightReduce = function(call, initial, indexs) {
   var call = arguments[0], others;
   if (arguments.length > 2 && arguments[2] !== undefined) {
     others = Array.from(arguments).slice(2);
+  }
   this.cnRightForEach(function(e,i,a) {
     init = call(init, e, i, a);
   }, others);
@@ -202,6 +203,7 @@ Array.prototype.cnReduce = function(call, initial, indexs) {
   var call = arguments[0], others;
   if (arguments.length > 2 && arguments[2] !== undefined) {
     others = Array.from(arguments).slice(2);
+  }
   this.cnForEach(function(e,i,a) {
     init = call(init, e, i, a);
   }, others);
