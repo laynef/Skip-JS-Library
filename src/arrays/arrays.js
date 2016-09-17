@@ -325,13 +325,25 @@ Array.prototype.cnIntersection = function(calls, indexs) {
   }
   if (calls === undefined) { calls = function(x) { return x; } }
   return this.cnReduce(function(acc, item) {
-    item.cnUniq().forEach(function(x) {
-      if (!acc.includes(calls(x))) {
-        acc.push(x)
-      }
+    return acc.cnFilter(function(e) {
+      return item.indexOf(e) > -1;
     });
-    return acc;
-  },[], others);
+  }, undefined, others);
+}
+
+// cnDifference
+
+Array.prototype.cnDifference = function(calls, indexs) {
+  var call = arguments[0], others;
+  if (arguments.length > 1 && arguments[1] !== undefined) {
+    others = Array.from(arguments).slice(1);
+  }
+  if (calls === undefined) { calls = function(x) { return x; } }
+  return this.cnReduce(function(acc, item) {
+    return acc.cnFilter(function(e) {
+      return item.indexOf(e) === -1;
+    });
+  }, undefined, others);
 }
 
 // cnRandomShuffle
@@ -381,4 +393,34 @@ Array.prototype.cnFlatMap = function(args) {
 
 Array.prototype.cnCompact = function(indexs) {
   return this.cnFilter(function(x) { return Number(x) !== 0; }, arguments);
+}
+
+// cnPluck
+
+Array.prototype.cnPluck = function(key, indexs) {
+  var often;
+  if (arguments.length > 1) {
+    others = Array.from(arguments).slice(1);
+  }
+  return this.cnMap(function(x) {
+    return x[key];
+  }, others);
+}
+
+
+// cnZip
+
+Array.prototype.cnZip = function(index) {
+  var arr = [], args;
+  if (arguments.length > 0) {
+    args = Array.from(arguments);
+  }
+  for (var i = 0; i < arguments.length; i++) {
+    if (args === undefined) {
+      arr.push(this.cnPluck(i));
+    } else if (!args.includes(i)) {
+      arr.push(this.cnPluck(i));
+    }
+  }
+  return arr;
 }
