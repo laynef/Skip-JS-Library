@@ -3,7 +3,7 @@
 * @Date:   09-09-2016
 * @Email:  laynefaler@gmail.com
 * @Last modified by:   laynefaler
-* @Last modified time: 09-16-2016
+* @Last modified time: 09-17-2016
 */
 
 /*
@@ -328,7 +328,7 @@ Array.prototype.cnIntersection = function(calls, indexs) {
     return acc.cnFilter(function(e) {
       return item.indexOf(e) > -1;
     });
-  }, undefined, others);
+  }, [], others);
 }
 
 // cnDifference
@@ -343,8 +343,28 @@ Array.prototype.cnDifference = function(calls, indexs) {
     return acc.cnFilter(function(e) {
       return item.indexOf(e) === -1;
     });
-  }, undefined, others);
+  }, []], others);
 }
+
+// cnUnion
+
+Array.prototype.cnUnion = function(calls, indexs) {
+  var call = arguments[0], others;
+  if (arguments.length > 1 && arguments[1] !== undefined) {
+    others = Array.from(arguments).slice(1);
+  }
+  if (calls === undefined) { calls = function(x) { return x; } }
+  return this.cnReduce(function(acc, item) {
+     item.cnForEach(function(e) {
+      if (acc.indexOf(e) === -1) {
+        acc.push(e);
+      }
+    });
+    return acc;
+  }, [], others);
+}
+
+console.log([[1, 2, 3], [101, 2, 1, 10], [2, 1]].cnUnion());
 
 // cnRandomShuffle
 
