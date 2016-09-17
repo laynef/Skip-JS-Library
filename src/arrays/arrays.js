@@ -343,7 +343,7 @@ Array.prototype.cnDifference = function(calls, indexs) {
     return acc.cnFilter(function(e) {
       return item.indexOf(e) === -1;
     });
-  }, []], others);
+  }, [], others);
 }
 
 // cnUnion
@@ -363,8 +363,6 @@ Array.prototype.cnUnion = function(calls, indexs) {
     return acc;
   }, [], others);
 }
-
-console.log([[1, 2, 3], [101, 2, 1, 10], [2, 1]].cnUnion());
 
 // cnRandomShuffle
 
