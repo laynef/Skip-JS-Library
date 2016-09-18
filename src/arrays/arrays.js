@@ -416,7 +416,7 @@ Array.prototype.cnCompact = function(indexs) {
 // cnPluck
 
 Array.prototype.cnPluck = function(key, indexs) {
-  var often;
+  var others;
   if (arguments.length > 1) {
     others = Array.from(arguments).slice(1);
   }
@@ -427,18 +427,18 @@ Array.prototype.cnPluck = function(key, indexs) {
 
 
 // cnZip
+// REVIEW: adding indexs (args)
 
 Array.prototype.cnZip = function(index) {
-  var arr = [], args;
-  if (arguments.length > 0) {
+  var args, arrays = this;
+  if (arguments.length >= 1) {
     args = Array.from(arguments);
   }
-  for (var i = 0; i < arguments.length; i++) {
-    if (args === undefined) {
-      arr.push(this.cnPluck(i));
-    } else if (!args.includes(i)) {
-      arr.push(this.cnPluck(i));
-    }
-  }
-  return arr;
+  return arrays[0].cnMap(function(_, i) {
+    return arrays.cnMap(function(e) {
+      return e[i];
+    });
+  });
 }
+
+// console.log([['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false]].cnZip());
