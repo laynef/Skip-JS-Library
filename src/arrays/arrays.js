@@ -3,7 +3,7 @@
 * @Date:   09-09-2016
 * @Email:  laynefaler@gmail.com
 * @Last modified by:   laynefaler
-* @Last modified time: 09-17-2016
+* @Last modified time: 09-20-2016
 */
 
 /*
@@ -427,12 +427,12 @@ Array.prototype.cnPluck = function(key, indexs) {
 
 
 // cnZip
-// REVIEW: adding indexs (args)
+// REVIEW: adding indexs (others)
 
 Array.prototype.cnZip = function(index) {
-  var args, arrays = this;
-  if (arguments.length >= 1) {
-    args = Array.from(arguments);
+  var others, arrays = this;
+  if (arguments.length > 0 && arguments[0] !== undefined) {
+    others = Array.from(arguments).slice(1);
   }
   return arrays[0].cnMap(function(_, i) {
     return arrays.cnMap(function(e) {
@@ -441,4 +441,17 @@ Array.prototype.cnZip = function(index) {
   });
 }
 
-// console.log([['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false]].cnZip());
+// cnUnZip
+// REVIEW: adding indexs (others)
+
+Array.prototype.cnUnZip = function(index) {
+  var others;
+  if (arguments.length > 0 && arguments[0] !== undefined) {
+    others = Array.from(arguments).slice(1);
+  }
+  return this.cnMap(function(e,i,a) {
+    return e.cnMap(function(x,y,z) {
+      return a[y][i];
+    });
+  });
+}
