@@ -3,7 +3,7 @@
 * @Date:   09-09-2016
 * @Email:  laynefaler@gmail.com
 * @Last modified by:   laynefaler
-* @Last modified time: 09-20-2016
+* @Last modified time: 09-25-2016
 */
 
 /*
@@ -19,8 +19,17 @@ To chain with others
 
 // cnClear
 
-Array.prototype.cnClear = function() {
-  return [];
+Object.prototype.cnClear = function() {
+  switch (this.constructor) {
+    case String:
+      return '';
+    case Object:
+      return {};
+    case Array:
+      return [];
+    case Number:
+      return 0;
+  }
 }
 
 // cnPopOff
@@ -66,19 +75,31 @@ Array.prototype.cnPush = function(item, index) {
 
 // cnForEach
 
-Array.prototype.cnForEach = function(callback, indexs) {
+Object.prototype.cnForEach = function(callback, indexs) {
   var call = arguments[0], args;
   if (arguments.length > 1 && arguments[1] !== undefined) {
     args = Array.from(arguments).slice(1);
   }
 
-  for (var i = 0; i < this.length; i++) {
-    if (args === undefined) {
-      call(this[i], i, this);
-    } else if (args.includes(i)) {
-      call(this[i], i, this);
+
+  if (this.constructor !== Object) {
+    for (var i = 0; i < this.length; i++) {
+      if (args === undefined) {
+        call(this[i], i, this);
+      } else if (args.includes(i)) {
+        call(this[i], i, this);
+      }
+    }
+  } else {
+    for (var i in this) {
+      if (args === undefined) {
+        call(this[i], i, this);
+      } else if (args.includes(i)) {
+        call(this[i], i, this);
+      }
     }
   }
+
 }
 
 // cnRightForEach
@@ -100,9 +121,10 @@ Array.prototype.cnRightForEach = function(callback, indexs) {
 
 // cnMap
 
-Array.prototype.cnMap = function(callback,indexs) {
+Object.prototype.cnMap = function(callback,indexs) {
     var arr = [], others;
     var calls = arguments[0];
+    
     if (arguments.length > 1) { others = Array.from(arguments).slice(1); }
     this.cnForEach(function(e,i,a) {
       arr.push(calls(e,i,a));
@@ -112,7 +134,7 @@ Array.prototype.cnMap = function(callback,indexs) {
 
 // cnFilter
 
-Array.prototype.cnFilter = function(callback,indexs) {
+Object.prototype.cnFilter = function(callback,indexs) {
   var arr = [], others;
   var calls = arguments[0];
   if (arguments.length > 1) { others = Array.from(arguments).slice(1); }
@@ -126,7 +148,7 @@ Array.prototype.cnFilter = function(callback,indexs) {
 
 // cnClip
 
-Array.prototype.cnClip = function(indexs) {
+Object.prototype.cnClip = function(indexs) {
   var indie = Array.from(arguments);
   return this.cnFilter(function(e,i,a) {
     return !indie.includes(i);
@@ -135,7 +157,7 @@ Array.prototype.cnClip = function(indexs) {
 
 // cnReject
 
-Array.prototype.cnReject = function(args) {
+Object.prototype.cnReject = function(args) {
   var call = arguments[0], others;
   if (arguments.length > 1 && arguments[1] !== undefined) {
     others = Array.from(arguments).slice(1);
@@ -198,7 +220,7 @@ Array.prototype.cnRightReduce = function(call, initial, indexs) {
 
 // cnReduce
 
-Array.prototype.cnReduce = function(call, initial, indexs) {
+Object.prototype.cnReduce = function(call, initial, indexs) {
   var init = arguments[1] === undefined ? this.pop() : arguments[1];
   var call = arguments[0], others;
   if (arguments.length > 2 && arguments[2] !== undefined) {
@@ -212,7 +234,7 @@ Array.prototype.cnReduce = function(call, initial, indexs) {
 
 // cnCheck
 
-Array.prototype.cnCheck = function(calls, index) {
+Object.prototype.cnCheck = function(calls, index) {
   var call = arguments[0], others;
   if (arguments.length > 1 && arguments[1] !== undefined) {
     others = Array.from(arguments).slice(1);
@@ -230,7 +252,7 @@ Array.prototype.cnCheck = function(calls, index) {
 
 // cnFind
 
-Array.prototype.cnFind = function(callback, time) {
+Object.prototype.cnFind = function(callback, time) {
   var inn = time === undefined ? 1 : time;
   var ph = 0;
 
@@ -253,7 +275,7 @@ Array.prototype.cnFind = function(callback, time) {
 
 // cnUniq
 
-Array.prototype.cnUniq = function() {
+Object.prototype.cnUniq = function() {
   var call = arguments[0], others;
   if (arguments.length > 1 && arguments[1] !== undefined) {
     others = Array.from(arguments).slice(1);
@@ -409,13 +431,13 @@ Array.prototype.cnFlatMap = function(args) {
 
 // cnCompact
 
-Array.prototype.cnCompact = function(indexs) {
+Object.prototype.cnCompact = function(indexs) {
   return this.cnFilter(function(x) { return Number(x) !== 0; }, arguments);
 }
 
 // cnPluck
 
-Array.prototype.cnPluck = function(key, indexs) {
+Object.prototype.cnPluck = function(key, indexs) {
   var others;
   if (arguments.length > 1) {
     others = Array.from(arguments).slice(1);
@@ -429,7 +451,7 @@ Array.prototype.cnPluck = function(key, indexs) {
 // cnZip
 // REVIEW: adding indexs (others)
 
-Array.prototype.cnZip = function(index) {
+Object.prototype.cnZip = function(index) {
   var others, arrays = this;
   if (arguments.length > 0 && arguments[0] !== undefined) {
     others = Array.from(arguments).slice(1);
@@ -444,7 +466,7 @@ Array.prototype.cnZip = function(index) {
 // cnUnZip
 // REVIEW: adding indexs (others)
 
-Array.prototype.cnUnZip = function(index) {
+Object.prototype.cnUnZip = function(index) {
   var others;
   if (arguments.length > 0 && arguments[0] !== undefined) {
     others = Array.from(arguments).slice(1);
