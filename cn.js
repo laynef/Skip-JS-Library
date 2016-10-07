@@ -17,8 +17,6 @@ To chain with others
 
 */
 
-// window._ = {};
-
 module.exports = {
 
   // cnPopOff
