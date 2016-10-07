@@ -19,21 +19,6 @@ To chain with others
 
 module.exports = {
 
-  // cnClear
-
-  cnClear : function(array) {
-    switch (array.constructor) {
-      case String:
-        return '';
-      case Object:
-        return {}
-      case Array:
-        return [];
-      case Number:
-        return 0;
-    }
-  },
-
   // cnPopOff
 
   cnPopOff : function(array) {
@@ -347,7 +332,7 @@ module.exports = {
     if (arguments.length > 2 && arguments[2] !== undefined) {
       others = Array.from(arguments).slice(1);
     }
-    if (calls === undefined) { calls : function(x) { return x; } }
+    if (calls === undefined) { calls = function(x) { return x; } }
     return array.cnReduce(function(acc, item) {
       return acc.cnFilter(function(e) {
         return item.indexOf(e) > -1;
@@ -362,7 +347,7 @@ module.exports = {
     if (arguments.length > 2 && arguments[2] !== undefined) {
       others = Array.from(arguments).slice(1);
     }
-    if (calls === undefined) { calls : function(x) { return x; } }
+    if (calls === undefined) { calls = function(x) { return x; } }
     return array.cnReduce(function(acc, item) {
       return acc.cnFilter(function(e) {
         return item.indexOf(e) === -1;
@@ -377,7 +362,7 @@ module.exports = {
     if (arguments.length > 2 && arguments[2] !== undefined) {
       others = Array.from(arguments).slice(1);
     }
-    if (calls === undefined) { calls : function(x) { return x; } }
+    if (calls === undefined) { calls = function(x) { return x; } }
     return array.cnReduce(function(acc, item) {
        item.cnForEach(function(e) {
         if (acc.indexOf(e) === -1) {
