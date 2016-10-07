@@ -17,7 +17,7 @@ To chain with others
 
 */
 
-window._ = {};
+// window._ = {};
 
 module.exports = {
 
