@@ -17,7 +17,12 @@ To chain with others
 
 */
 
+
 (function() {
+
+  var asdf = function(x) {
+    console.log(x);
+  }
 
   // cnClear
 
@@ -54,6 +59,7 @@ To chain with others
     return this[Math.floor(Math.random() * this.length)];
   };
 
+
   // cnPush
 
   Array.prototype.cnPush = function(item, index) {
@@ -88,7 +94,7 @@ To chain with others
       for (var i = 0; i < this.length; i++) {
         if (args === undefined) {
           call(this[i], i, this);
-        } else if (args.includes(i)) {
+        } else if (!args.includes(i)) {
           call(this[i], i, this);
         }
       }
@@ -96,13 +102,18 @@ To chain with others
       for (var i in this) {
         if (args === undefined) {
           call(this[i], i, this);
-        } else if (args.includes(i)) {
+        } else if (!args.includes(i)) {
           call(this[i], i, this);
         }
       }
     }
 
   };
+
+  asdf([1,2,3,4].cnForEach(function(x) {
+    console.log(x*2);
+
+  }, 2));
 
   // cnRightForEach
 
