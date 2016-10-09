@@ -3,7 +3,7 @@
 @Date:   09-09-2016
 @Email:  laynefaler@gmail.com
 @Last modified by:   laynefaler
-@Last modified time: 10-06-2016
+@Last modified time: 10-09-2016
 -->
 
 # README
@@ -14,7 +14,7 @@ This library is a convenient way to add functions to your JavaSCript without add
 
 ### Installation
 
-`npm install cn-js`
+`npm install skip-js`
 
 At the top of your file enter
-`var _ = require('cn-js');`
+`require('skip-js');`
