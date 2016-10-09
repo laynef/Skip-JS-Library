@@ -17,4 +17,4 @@ This library is a convenient way to add functions to your JavaSCript without add
 `npm install cn-js`
 
 At the top of your file enter
-`require('cn.js');`
+`var _ = require('cn-js');`

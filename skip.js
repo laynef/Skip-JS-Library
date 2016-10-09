@@ -3,7 +3,7 @@
 * @Date:   09-09-2016
 * @Email:  laynefaler@gmail.com
 * @Last modified by:   laynefaler
-* @Last modified time: 10-06-2016
+* @Last modified time: 10-08-2016
 */
 
 /*
@@ -16,6 +16,12 @@ To chain with others
 **********************
 
 */
+
+var root = typeof self == 'object' && self.self === self && self ||
+          typeof global == 'object' && global.global === global && global ||
+          this;
+
+var prev = root._;
 
 module.exports = {
 
@@ -52,7 +58,7 @@ module.exports = {
       for (var i = 0; i < array.length; i++) {
         if (args === undefined) {
           call(array[i], i, array);
-        } else if (args.includes(i)) {
+        } else if (!args.includes(i)) {
           call(array[i], i, array);
         }
       }
@@ -60,7 +66,7 @@ module.exports = {
       for (var i in array) {
         if (args === undefined) {
           call(array[i], i, array);
-        } else if (args.includes(i)) {
+        } else if (!args.includes(i)) {
           call(array[i], i, array);
         }
       }
