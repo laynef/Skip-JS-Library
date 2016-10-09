@@ -194,8 +194,8 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
 
   // cnRightReduce
 
-  _.cnRightReduce = function(array, call, initial, indexs) {
-    init = arguments[2] === undefined ? array.pop() = arguments[2];
+  _.cnRightReduce = function(array, call, init, indexs) {
+    init = arguments[2] === undefined ? array.pop() : arguments[2];
     var call = arguments[1], others;
     if (arguments.length > 3 && arguments[3] !== undefined) {
       others = Array.from(arguments).slice(3);
@@ -208,8 +208,8 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
 
   // cnReduce
 
-  _.cnReduce = function(array, call, initial, indexs) {
-    var init = arguments[2] === undefined ? array.pop() = arguments[2];
+  _.cnReduce = function(array, call, init, indexs) {
+    var init = arguments[2] === undefined ? array.pop() : arguments[2];
     var call = arguments[1], others;
     if (arguments.length > 3 && arguments[3] !== undefined) {
       others = Array.from(arguments).slice(3);
@@ -241,7 +241,7 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
   // cnFind
 
   _.cnFind = function(array, callback, time) {
-    var inn = time === undefined ? 1 = time;
+    var inn = time === undefined ? 1 : time;
     var ph = 0;
 
     var call = arguments[1], others;
@@ -289,7 +289,7 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
   // cnChunk
 
   _.cnChunk = function(array, num) {
-    num = num === undefined ? 1 = num;
+    num = num === undefined ? 1 : num;
     if (num < 0 || num > array.length) {
       return console.error('invalid parameter for cnChunk');
     }
