@@ -434,7 +434,7 @@ To chain with others
   // cnCompact
 
   Object.prototype.cnCompact = function(indexs) {
-    return this.cnFilter(function(x) { return Number(x) !== 0; }; arguments);
+    return this.cnFilter(function(x) { return Number(x) !== 0; }, arguments);
   };
 
   // cnPluck
