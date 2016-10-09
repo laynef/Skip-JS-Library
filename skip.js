@@ -3,7 +3,7 @@
 * @Date:   09-09-2016
 * @Email:  laynefaler@gmail.com
 * @Last modified by:   laynefaler
-* @Last modified time: 10-08-2016
+* @Last modified time: 10-09-2016
 */
 
 /*
@@ -16,6 +16,8 @@ To chain with others
 **********************
 
 */
+
+(function() {
 
 var root = typeof self == 'object' && self.self === self && self ||
           typeof global == 'object' && global.global === global && global ||
@@ -38,31 +40,29 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
   root._ = _;
 }
 
-module.exports = {
-
   // cnPopOff
 
-  cnPopOff : function(array) {
+  _.cnPopOff = function(array) {
     array.pop();
     return array;
   },
 
   // cnShiftOff
 
-  cnShiftOff : function(array) {
+  _.cnShiftOff = function(array) {
     array.shift();
     return array;
   },
 
   // cnSample
 
-  cnSample : function(array) {
+  _.cnSample = function(array) {
     return array[Math.floor(Math.random() * array.length)];
   },
 
   // cnForEach
 
-  cnForEach : function(array, callback, indexs) {
+  _.cnForEach = function(array, callback, indexs) {
     var call = arguments[1], args;
     if (arguments.length > 2 && arguments[2] !== undefined) {
       args = Array.from(arguments).slice(2);
@@ -91,7 +91,7 @@ module.exports = {
 
   // cnRightForEach
 
-  cnRightForEach : function(array, callback, indexs) {
+  _.cnRightForEach = function(array, callback, indexs) {
     var call = arguments[1], args;
     if (arguments.length > 2 && arguments[2] !== undefined) {
       args = Array.from(arguments).slice(2);
@@ -108,7 +108,7 @@ module.exports = {
 
   // cnMap
 
-  cnMap : function(array, callback,indexs) {
+  _.cnMap = function(array, callback,indexs) {
       var arr = [], others;
       var calls = arguments[1];
 
@@ -121,7 +121,7 @@ module.exports = {
 
   // cnFilter
 
-  cnFilter : function(array, callback,indexs) {
+  _.cnFilter = function(array, callback,indexs) {
     var arr = [], others;
     var calls = arguments[1];
     if (arguments.length > 2) { others = Array.from(arguments).slice(2); }
@@ -135,7 +135,7 @@ module.exports = {
 
   // cnClip
 
-  cnClip : function(array, indexs) {
+  _.cnClip = function(array, indexs) {
     var indie = Array.from(arguments);
     return _.cnFilter(array, function(e,i,a) {
       return !indie.includes(i);
@@ -144,7 +144,7 @@ module.exports = {
 
   // cnReject
 
-  cnReject : function(array, args) {
+  _.cnReject = function(array, args) {
     var call = arguments[1], others;
     if (arguments.length > 2 && arguments[2] !== undefined) {
       others = Array.from(arguments).slice(2);
@@ -156,7 +156,7 @@ module.exports = {
 
   // cnFlatten
 
-  cnFlatten : function(array) {
+  _.cnFlatten = function(array) {
     var res = [];
     _.cnForEach(array, function(e,i,a) {
       if (!Array.isArray(e)) {
@@ -171,19 +171,19 @@ module.exports = {
 
   // cnMax
 
-  cnMax : function(array) {
+  _.cnMax = function(array) {
     return array.sort(function(a,b) { return a-b; })[array.length-1];
   },
 
   // cnMin
 
-  cnMin : function(array) {
+  _.cnMin = function(array) {
     return array.sort(function(a,b) { return a-b; })[0];
   },
 
   // cnLastIndexOf
 
-  cnLastIndexOf : function(array, num) {
+  _.cnLastIndexOf = function(array, num) {
     for (var i = array.length-1; i >= 0; i--) {
       if (array[i] === num) {
         return i;
@@ -194,8 +194,8 @@ module.exports = {
 
   // cnRightReduce
 
-  cnRightReduce : function(array, call, initial, indexs) {
-    init = arguments[2] === undefined ? array.pop() : arguments[2];
+  _.cnRightReduce = function(array, call, initial, indexs) {
+    init = arguments[2] === undefined ? array.pop() = arguments[2];
     var call = arguments[1], others;
     if (arguments.length > 3 && arguments[3] !== undefined) {
       others = Array.from(arguments).slice(3);
@@ -208,8 +208,8 @@ module.exports = {
 
   // cnReduce
 
-  cnReduce : function(array, call, initial, indexs) {
-    var init = arguments[2] === undefined ? array.pop() : arguments[2];
+  _.cnReduce = function(array, call, initial, indexs) {
+    var init = arguments[2] === undefined ? array.pop() = arguments[2];
     var call = arguments[1], others;
     if (arguments.length > 3 && arguments[3] !== undefined) {
       others = Array.from(arguments).slice(3);
@@ -222,7 +222,7 @@ module.exports = {
 
   // cnCheck
 
-  cnCheck : function(array, calls, index) {
+  _.cnCheck = function(array, calls, index) {
     var call = arguments[1], others;
     if (arguments.length > 2 && arguments[2] !== undefined) {
       others = Array.from(arguments).slice(2);
@@ -240,8 +240,8 @@ module.exports = {
 
   // cnFind
 
-  cnFind : function(array, callback, time) {
-    var inn = time === undefined ? 1 : time;
+  _.cnFind = function(array, callback, time) {
+    var inn = time === undefined ? 1 = time;
     var ph = 0;
 
     var call = arguments[1], others;
@@ -263,7 +263,7 @@ module.exports = {
 
   // cnUniq
 
-  cnUniq : function(array) {
+  _.cnUniq = function(array) {
     var call = arguments[1], others;
     if (arguments.length > 2 && arguments[2] !== undefined) {
       others = Array.from(arguments).slice(2);
@@ -275,7 +275,7 @@ module.exports = {
 
   // cnSortedUniq
 
-  cnSortedUniq : function(array) {
+  _.cnSortedUniq = function(array) {
     var call = arguments[1], others;
     array = array.sort();
     if (arguments.length > 2 && arguments[2] !== undefined) {
@@ -288,8 +288,8 @@ module.exports = {
 
   // cnChunk
 
-  cnChunk : function(array, num) {
-    num = num === undefined ? 1 : num;
+  _.cnChunk = function(array, num) {
+    num = num === undefined ? 1 = num;
     if (num < 0 || num > array.length) {
       return console.error('invalid parameter for cnChunk');
     }
@@ -307,14 +307,14 @@ module.exports = {
 
   // cnConcatMap
 
-  cnConcatMap : function(array, calls, index) {
+  _.cnConcatMap = function(array, calls, index) {
     var arr = _.cnMap(arguments);
     return arr.concat(array);
   },
 
   // cnAtIndex
 
-  cnAtIndex : function(array, inn) {
+  _.cnAtIndex = function(array, inn) {
     if (inn === undefined) { inn = 0; }
     if (inn > array.length || inn < -array.length) {
       return console.error('invalid index atIndex');
@@ -329,7 +329,7 @@ module.exports = {
 
   // cnIntersection
 
-  cnIntersection : function(array, calls, indexs) {
+  _.cnIntersection = function(array, calls, indexs) {
     var call = arguments[1], others;
     if (arguments.length > 2 && arguments[2] !== undefined) {
       others = Array.from(arguments).slice(2);
@@ -344,7 +344,7 @@ module.exports = {
 
   // cnDifference
 
-  cnDifference : function(array, calls, indexs) {
+  _.cnDifference = function(array, calls, indexs) {
     var call = arguments[1], others;
     if (arguments.length > 2 && arguments[2] !== undefined) {
       others = Array.from(arguments).slice(2);
@@ -359,7 +359,7 @@ module.exports = {
 
   // cnUnion
 
-  cnUnion : function(array, calls, indexs) {
+  _.cnUnion = function(array, calls, indexs) {
     var call = arguments[1], others;
     if (arguments.length > 2 && arguments[2] !== undefined) {
       others = Array.from(arguments).slice(2);
@@ -377,7 +377,7 @@ module.exports = {
 
   // cnRandomShuffle
 
-  cnRandomShuffle : function(array) {
+  _.cnRandomShuffle = function(array) {
     return array.sort(function(a,b) {
       return Math.floor(Math.random(a)) - Math.floor(Math.random(b));
     });
@@ -385,7 +385,7 @@ module.exports = {
 
   // shuffle
 
-  cnShuffle : function(array, num) {
+  _.cnShuffle = function(array, num) {
     var arr = [];
     if ((num > array.length-1) || (-array.length+1 > num)) {
       return console.error('invalid number');
@@ -415,7 +415,7 @@ module.exports = {
   // REVIEW: rest
   // cnFlatMap
 
-  cnFlatMap : function(array, args) {
+  _.cnFlatMap = function(array, args) {
     var rest = arguments.slice(1);
     return _.cnMap(_.cnFlatten(array), rest);
   },
@@ -423,14 +423,14 @@ module.exports = {
   // REVIEW: rest
   // cnCompact
 
-  cnCompact : function(array, indexs) {
+  _.cnCompact = function(array, indexs) {
     var rest = arguments.slice(1);
     return _.cnFilter(array, function(x) { return Number(x) !== 0; }, rest);
   },
 
   // cnPluck
 
-  cnPluck : function(array, key, indexs) {
+  _.cnPluck = function(array, key, indexs) {
     var others;
     if (arguments.length > 2) {
       others = Array.from(arguments).slice(2);
@@ -444,7 +444,7 @@ module.exports = {
   // cnZip
   // REVIEW: adding indexs (others)
 
-  cnZip : function(array, index) {
+  _.cnZip = function(array, index) {
     var others, arrays = arguments[0];
     if (arguments.length > 1 && arguments[1] !== undefined) {
       others = Array.from(arguments).slice(2);
@@ -459,12 +459,12 @@ module.exports = {
   // cnUnZip
   // REVIEW: adding indexs (others)
 
-  cnUnZip : function(array, index) {
+  _.cnUnZip = function(array, index) {
     var others;
     if (arguments.length > 1 && arguments[1] !== undefined) {
       others = Array.from(arguments).slice(2);
     }
-    return cnMap(array, function(e,i,a) {
+    return _.cnMap(array, function(e,i,a) {
       return _.cnMap(e, function(x,y,z) {
         return a[y][i];
       });
@@ -472,3 +472,5 @@ module.exports = {
   }
 
 };
+
+}());
