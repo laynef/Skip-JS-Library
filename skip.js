@@ -42,9 +42,9 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
 
   // cnPopOff
 
-  Array.prototype.cnPopOff = function(array) {
-    array.pop();
-    return array;
+  Array.prototype.cnPopOff = function() {
+    this.pop();
+    return this;
   };
 
   // cnShiftOff
