@@ -81,8 +81,10 @@ To chain with others
 
   Object.prototype.sForEach = function(callback, indexs) {
     var call = arguments[0], args;
-    if (arguments.length > 1 && arguments[1] !== undefined) {
+    if (arguments.length > 1 && arguments[1] !== undefined && arguments[1].constructor !== Array) {
       args = Array.from(arguments).slice(1);
+    } else if (arguments.length > 1 && arguments[1] !== undefined && arguments[1].constructor === Array) {
+      args = arguments[1];
     }
 
     if (this.constructor !== Object) {
@@ -109,8 +111,10 @@ To chain with others
 
   Array.prototype.sRightForEach = function(callback, indexs) {
     var call = arguments[0], args;
-    if (arguments.length > 1 && arguments[1] !== undefined) {
+    if (arguments.length > 1 && arguments[1] !== undefined && arguments[1].constructor !== 'array') {
       args = Array.from(arguments).slice(1);
+    } else if (arguments.length > 1 && arguments[1] !== undefined && arguments[1].constructor === 'array') {
+      args = arguments[1];
     }
 
     for (var i = this.length-1; i >= 0; i--) {
@@ -450,15 +454,34 @@ To chain with others
     }, others);
   };
 
+  // sRemove
+
+  Array.prototype.sRemove = function(index) {
+    var res = [], others, first = arguments[0];
+    if (first instanceof Array) {
+      others = first;
+    } else {
+      others = Array.from(arguments);
+    }
+    this.sForEach(function(x) {
+      res.push(x);
+      console.log(x);
+    }, others);
+    return res;
+  };
 
   // sZip
-  // REVIEW: adding indexs (others)
 
-  Object.prototype.sZip = function(index) {
-    var others, arrays = this;
-    if (arguments.length > 0 && arguments[0] !== undefined) {
+  Object.prototype.sZip = function(calls, index) {
+    var others, arr = this;
+    if (arguments.length > 1 && arguments[1] !== undefined) {
       others = Array.from(arguments).slice(1);
     }
+
+    var arrays = arr.sMap(function(a) {
+      return a.sRemove(others);
+    });
+
     return arrays[0].sMap(function(_, i) {
       return arrays.sMap(function(e) {
         return e[i];
@@ -467,12 +490,12 @@ To chain with others
   };
 
   // sUnZip
-  // REVIEW: adding indexs (others)
-
+  // only one index
+  
   Object.prototype.sUnZip = function(index) {
-    var others;
+    var others, arr = this;
     if (arguments.length > 0 && arguments[0] !== undefined) {
-      others = Array.from(arguments).slice(1);
+      others = Array.from(arguments);
     }
     return this.sMap(function(e,i,a) {
       return e.sMap(function(x,y,z) {

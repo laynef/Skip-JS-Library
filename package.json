@@ -1,6 +1,6 @@
 {
   "name": "skip-js",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "This is a JavaScript library in vanilla JavaScript to help you with your JavaScript functions. THese are pre-made chaining functions that allow you to skip cretain indexs while using map, filter, forEach, reduce, etc. This is helpful in projects where you would use map and needed to select which indexs need to be changed by default they change every index like the given function. However, you have the option to skip indexs if needed.",
   "main": "skip.js",
   "directories": {
