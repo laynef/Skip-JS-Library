@@ -19,26 +19,20 @@ To chain with others
 
 (function() {
 
-var root = typeof self == 'object' && self.self === self && self ||
-          typeof global == 'object' && global.global === global && global ||
-          this;
+  // cnClear
 
-var prev = root._;
-
-var _ = function(obj) {
-  if (obj instanceof _) return obj;
-  if (!(this instanceof _)) return new _(obj);
-  this._wrapped = obj;
-};
-
-if (typeof exports != 'undefined' && !exports.nodeType) {
-  if (typeof module != 'undefined' && !module.nodeType && module.exports) {
-    exports = module.exports = _;
-  }
-  exports._ = _;
-} else {
-  root._ = _;
-}
+  Object.prototype.cnClear = function() {
+    switch (this.constructor) {
+      case String:
+        return '';
+      case Object:
+        return {};
+      case Array:
+        return [];
+      case Number:
+        return 0;
+    }
+  };
 
   // cnPopOff
 
@@ -49,40 +43,61 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
 
   // cnShiftOff
 
-  _.cnShiftOff = function(array) {
-    array.shift();
-    return array;
+  Array.prototype.cnShiftOff = function() {
+    this.shift();
+    return this;
   };
 
   // cnSample
 
-  _.cnSample = function(array) {
-    return array[Math.floor(Math.random() * array.length)];
+  Array.prototype.cnSample = function() {
+    return this[Math.floor(Math.random() * this.length)];
+  };
+
+  // cnPush
+
+  Array.prototype.cnPush = function(item, index) {
+    index = index === undefined ? this.length : (index < 0 || index > this.length) ? -1 : index;
+    if (index === -1) { return console.error('invalid index'); }
+    if (index === this.length) {
+      this[this.length] = item;
+      return this;
+    } else {
+      var temp = this;
+      var front = temp.splice(0, index-1);
+      var end = temp.splice(0);
+
+      front.push(item);
+      for (var i = 0; i < end.length; i++) {
+        front.push(end[i]);
+      }
+      return front;
+    }
   };
 
   // cnForEach
 
-  _.cnForEach = function(array, callback, indexs) {
-    var call = arguments[1], args;
-    if (arguments.length > 2 && arguments[2] !== undefined) {
-      args = Array.from(arguments).slice(2);
+  Object.prototype.cnForEach = function(callback, indexs) {
+    var call = arguments[0], args;
+    if (arguments.length > 1 && arguments[1] !== undefined) {
+      args = Array.from(arguments).slice(1);
     }
 
 
-    if (array.constructor !== Object) {
-      for (var i = 0; i < array.length; i++) {
+    if (this.constructor !== Object) {
+      for (var i = 0; i < this.length; i++) {
         if (args === undefined) {
-          call(array[i], i, array);
-        } else if (!args.includes(i)) {
-          call(array[i], i, array);
+          call(this[i], i, this);
+        } else if (args.includes(i)) {
+          call(this[i], i, this);
         }
       }
     } else {
-      for (var i in array) {
+      for (var i in this) {
         if (args === undefined) {
-          call(array[i], i, array);
-        } else if (!args.includes(i)) {
-          call(array[i], i, array);
+          call(this[i], i, this);
+        } else if (args.includes(i)) {
+          call(this[i], i, this);
         }
       }
     }
@@ -91,29 +106,29 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
 
   // cnRightForEach
 
-  _.cnRightForEach = function(array, callback, indexs) {
-    var call = arguments[1], args;
-    if (arguments.length > 2 && arguments[2] !== undefined) {
-      args = Array.from(arguments).slice(2);
+  Array.prototype.cnRightForEach = function(callback, indexs) {
+    var call = arguments[0], args;
+    if (arguments.length > 1 && arguments[1] !== undefined) {
+      args = Array.from(arguments).slice(1);
     }
 
-    for (var i = array.length-1; i >= 0; i--) {
+    for (var i = this.length-1; i >= 0; i--) {
       if (args.length === 0) {
-        call(array[i], i, array);
+        call(this[i], i, this);
       } else if (args.includes(i)) {
-        call(array[i], i, array);
+        call(this[i], i, this);
       }
     }
   };
 
   // cnMap
 
-  _.cnMap = function(array, callback,indexs) {
+  Object.prototype.cnMap = function(callback,indexs) {
       var arr = [], others;
-      var calls = arguments[1];
+      var calls = arguments[0];
 
-      if (arguments.length > 2) { others = Array.from(arguments).slice(2); }
-      _.cnForEach(array, function(e,i,a) {
+      if (arguments.length > 1) { others = Array.from(arguments).slice(1); }
+      this.cnForEach(function(e,i,a) {
         arr.push(calls(e,i,a));
       }, others);
       return arr;
@@ -121,11 +136,11 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
 
   // cnFilter
 
-  _.cnFilter = function(array, callback,indexs) {
+  Object.prototype.cnFilter = function(callback,indexs) {
     var arr = [], others;
-    var calls = arguments[1];
-    if (arguments.length > 2) { others = Array.from(arguments).slice(2); }
-    _.cnForEach(array, function(e,i,a) {
+    var calls = arguments[0];
+    if (arguments.length > 1) { others = Array.from(arguments).slice(1); }
+    this.cnForEach(function(e,i,a) {
       if (calls(e,i,a)) {
         arr.push(e);
       }
@@ -135,34 +150,33 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
 
   // cnClip
 
-  _.cnClip = function(array, indexs) {
+  Object.prototype.cnClip = function(indexs) {
     var indie = Array.from(arguments);
-    return _.cnFilter(array, function(e,i,a) {
+    return this.cnFilter(function(e,i,a) {
       return !indie.includes(i);
     });
   };
 
   // cnReject
 
-  _.cnReject = function(array, args) {
-    var call = arguments[1], others;
-    if (arguments.length > 2 && arguments[2] !== undefined) {
-      others = Array.from(arguments).slice(2);
+  Object.prototype.cnReject = function(args) {
+    var call = arguments[0], others;
+    if (arguments.length > 1 && arguments[1] !== undefined) {
+      others = Array.from(arguments).slice(1);
     }
-    return _.cnFilter(array, function(x) {
+    return this.cnFilter(function(x) {
       return !calls(x);
     }, others);
   };
 
   // cnFlatten
 
-  _.cnFlatten = function(array) {
+  Array.prototype.cnFlatten = function() {
     var res = [];
-    _.cnForEach(array, function(e,i,a) {
+    this.cnForEach(function(e,i,a) {
       if (!Array.isArray(e)) {
         res.push(e);
       } else {
-        // REVIEW: recursion
         res = res.concat(cnFlatten(e));
       }
     });
@@ -171,21 +185,21 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
 
   // cnMax
 
-  _.cnMax = function(array) {
-    return array.sort(function(a,b) { return a-b; })[array.length-1];
+  Array.prototype.cnMax = function() {
+    return this.sort(function(a,b) { return a-b; })[this.length-1];
   };
 
   // cnMin
 
-  _.cnMin = function(array) {
-    return array.sort(function(a,b) { return a-b; })[0];
+  Array.prototype.cnMin = function() {
+    return this.sort(function(a,b) { return a-b; })[0];
   };
 
   // cnLastIndexOf
 
-  _.cnLastIndexOf = function(array, num) {
-    for (var i = array.length-1; i >= 0; i--) {
-      if (array[i] === num) {
+  Array.prototype.cnLastIndexOf = function(num) {
+    for (var i = this.length-1; i >= 0; i--) {
+      if (this[i] === num) {
         return i;
       }
     }
@@ -194,27 +208,27 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
 
   // cnRightReduce
 
-  _.cnRightReduce = function(array, call, init, indexs) {
-    init = arguments[2] === undefined ? array.pop() : arguments[2];
-    var call = arguments[1], others;
-    if (arguments.length > 3 && arguments[3] !== undefined) {
-      others = Array.from(arguments).slice(3);
+  Array.prototype.cnRightReduce = function(call, initial, indexs) {
+    init = arguments[1] === undefined ? this.pop() : arguments[1];
+    var call = arguments[0], others;
+    if (arguments.length > 2 && arguments[2] !== undefined) {
+      others = Array.from(arguments).slice(2);
     }
-    _.cnRightForEach(array, (function(e,i,a) {
+    this.cnRightForEach(function(e,i,a) {
       init = call(init, e, i, a);
-    }, others));
+    }, others);
     return init;
   };
 
   // cnReduce
 
-  _.cnReduce = function(array, call, init, indexs) {
-    var init = arguments[2] === undefined ? array.pop() : arguments[2];
-    var call = arguments[1], others;
-    if (arguments.length > 3 && arguments[3] !== undefined) {
-      others = Array.from(arguments).slice(3);
+  Object.prototype.cnReduce = function(call, initial, indexs) {
+    var init = arguments[1] === undefined ? this.pop() : arguments[1];
+    var call = arguments[0], others;
+    if (arguments.length > 2 && arguments[2] !== undefined) {
+      others = Array.from(arguments).slice(2);
     }
-    _.cnForEach(array, function(e,i,a) {
+    this.cnForEach(function(e,i,a) {
       init = call(init, e, i, a);
     }, others);
     return init;
@@ -222,14 +236,14 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
 
   // cnCheck
 
-  _.cnCheck = function(array, calls, index) {
-    var call = arguments[1], others;
-    if (arguments.length > 2 && arguments[2] !== undefined) {
-      others = Array.from(arguments).slice(2);
+  Object.prototype.cnCheck = function(calls, index) {
+    var call = arguments[0], others;
+    if (arguments.length > 1 && arguments[1] !== undefined) {
+      others = Array.from(arguments).slice(1);
     }
     var bool = true;
 
-    _.cnForEach(array, function(e,i,a) {
+    this.cnForEach(function(e,i,a) {
       if (!call(e, i, a)) {
         bool = false;
       }
@@ -240,16 +254,16 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
 
   // cnFind
 
-  _.cnFind = function(array, callback, time) {
+  Object.prototype.cnFind = function(callback, time) {
     var inn = time === undefined ? 1 : time;
     var ph = 0;
 
-    var call = arguments[1], others;
-    if (arguments.length > 3 && arguments[3] !== undefined) {
-      others = Array.from(arguments).slice(3);
+    var call = arguments[0], others;
+    if (arguments.length > 2 && arguments[2] !== undefined) {
+      others = Array.from(arguments).slice(2);
     }
 
-    _.cnForEach(array, function(e,i,a) {
+    this.cnForEach(function(e,i,a) {
       if (callback(e,i,a)) {
         ph++;
         if (ph === inn) {
@@ -263,42 +277,41 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
 
   // cnUniq
 
-  _.cnUniq = function(array) {
-    var call = arguments[1], others;
-    if (arguments.length > 2 && arguments[2] !== undefined) {
-      others = Array.from(arguments).slice(2);
+  Object.prototype.cnUniq = function() {
+    var call = arguments[0], others;
+    if (arguments.length > 1 && arguments[1] !== undefined) {
+      others = Array.from(arguments).slice(1);
     }
-    return _.cnFilter(array, function(ele, i, arr) {
+    return this.cnFilter(function(ele, i, arr) {
       return arr.indexOf(ele) === i;
     }, others);
   };
 
   // cnSortedUniq
 
-  _.cnSortedUniq = function(array) {
-    var call = arguments[1], others;
-    array = array.sort();
-    if (arguments.length > 2 && arguments[2] !== undefined) {
-      others = Array.from(arguments).slice(2);
+  Array.prototype.cnSortedUniq = function() {
+    var call = arguments[0], others;
+    if (arguments.length > 1 && arguments[1] !== undefined) {
+      others = Array.from(arguments).slice(1);
     }
-    return _.cnFilter(array, function(e,i,a) {
+    return this.sort().cnFilter(function(e,i,a) {
       return a.indexOf(e) === i;
     }, others);
   };
 
   // cnChunk
 
-  _.cnChunk = function(array, num) {
+  Array.prototype.cnChunk = function(num) {
     num = num === undefined ? 1 : num;
-    if (num < 0 || num > array.length) {
+    if (num < 0 || num > this.length) {
       return console.error('invalid parameter for cnChunk');
     }
 
     var origin = [];
-    for (var i = 0; i < array.length; i+=num) {
+    for (var i = 0; i < this.length; i+=num) {
       var arr = [];
       for (var j = i; j < num+i; j++) {
-        arr.push(array[j]);
+        arr.push(this[j]);
       }
       origin.push(arr);
     }
@@ -307,36 +320,36 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
 
   // cnConcatMap
 
-  _.cnConcatMap = function(array, calls, index) {
-    var arr = _.cnMap(arguments);
-    return arr.concat(array);
+  Array.prototype.cnConcatMap = function(calls, index) {
+    var arr = this.cnMap(arguments);
+    return arr.concat(this);
   };
 
   // cnAtIndex
 
-  _.cnAtIndex = function(array, inn) {
+  Array.prototype.cnAtIndex = function(inn) {
     if (inn === undefined) { inn = 0; }
-    if (inn > array.length || inn < -array.length) {
+    if (inn > this.length || inn < -this.length) {
       return console.error('invalid index atIndex');
     }
     if (inn > 0) {
-      return array[inn];
+      return this[inn];
     } else {
-      var zombie = array.length + inn;
-      return array[zombie];
+      var zombie = this.length + inn;
+      return this[zombie];
     }
   };
 
   // cnIntersection
 
-  _.cnIntersection = function(array, calls, indexs) {
-    var call = arguments[1], others;
-    if (arguments.length > 2 && arguments[2] !== undefined) {
-      others = Array.from(arguments).slice(2);
+  Array.prototype.cnIntersection = function(calls, indexs) {
+    var call = arguments[0], others;
+    if (arguments.length > 1 && arguments[1] !== undefined) {
+      others = Array.from(arguments).slice(1);
     }
     if (calls === undefined) { calls = function(x) { return x; } }
-    return _.cnReduce(array, function(acc, item) {
-      return _.cnFilter(acc, function(e) {
+    return this.cnReduce(function(acc, item) {
+      return acc.cnFilter(function(e) {
         return item.indexOf(e) > -1;
       });
     }, [], others);
@@ -344,14 +357,14 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
 
   // cnDifference
 
-  _.cnDifference = function(array, calls, indexs) {
-    var call = arguments[1], others;
-    if (arguments.length > 2 && arguments[2] !== undefined) {
-      others = Array.from(arguments).slice(2);
+  Array.prototype.cnDifference = function(calls, indexs) {
+    var call = arguments[0], others;
+    if (arguments.length > 1 && arguments[1] !== undefined) {
+      others = Array.from(arguments).slice(1);
     }
     if (calls === undefined) { calls = function(x) { return x; } }
-    return _.cnReduce(array, function(acc, item) {
-      return _.cnFilter(acc, function(e) {
+    return this.cnReduce(function(acc, item) {
+      return acc.cnFilter(function(e) {
         return item.indexOf(e) === -1;
       });
     }, [], others);
@@ -359,14 +372,14 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
 
   // cnUnion
 
-  _.cnUnion = function(array, calls, indexs) {
-    var call = arguments[1], others;
-    if (arguments.length > 2 && arguments[2] !== undefined) {
-      others = Array.from(arguments).slice(2);
+  Array.prototype.cnUnion = function(calls, indexs) {
+    var call = arguments[0], others;
+    if (arguments.length > 1 && arguments[1] !== undefined) {
+      others = Array.from(arguments).slice(1);
     }
     if (calls === undefined) { calls = function(x) { return x; } }
-    return _.cnReduce(array, function(acc, item) {
-       _.cnForEach(item, function(e) {
+    return this.cnReduce(function(acc, item) {
+       item.cnForEach(function(e) {
         if (acc.indexOf(e) === -1) {
           acc.push(e);
         }
@@ -377,65 +390,61 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
 
   // cnRandomShuffle
 
-  _.cnRandomShuffle = function(array) {
-    return array.sort(function(a,b) {
+  Array.prototype.cnRandomShuffle = function() {
+    return this.sort(function(a,b) {
       return Math.floor(Math.random(a)) - Math.floor(Math.random(b));
     });
   };
 
   // shuffle
 
-  _.cnShuffle = function(array, num) {
+  Array.prototype.cnShuffle = function(num) {
     var arr = [];
-    if ((num > array.length-1) || (-array.length+1 > num)) {
+    if ((num > this.length-1) || (-this.length+1 > num)) {
       return console.error('invalid number');
     }
     if (num < 0) {
-      var newer = array.length - (num * -1);
-      for (var i = newer; i < array.length; i++) {
-        arr.push(array[i]);
+      var newer = this.length - (num * -1);
+      for (var i = newer; i < this.length; i++) {
+        arr.push(this[i]);
       }
       for (var i = 0; i < newer; i++) {
-        arr.push(array[i]);
+        arr.push(this[i]);
       }
       return arr;
     } else if (num === 0) {
-      return array;
+      return this;
     } else {
-      for (var i = num; i < array.length; i++) {
-        arr.push(array[i]);
+      for (var i = num; i < this.length; i++) {
+        arr.push(this[i]);
       }
       for (var i = 0; i < num; i++) {
-        arr.push(array[i]);
+        arr.push(this[i]);
       }
       return arr;
     }
   };
 
-  // REVIEW: rest
   // cnFlatMap
 
-  _.cnFlatMap = function(array, args) {
-    var rest = arguments.slice(1);
-    return _.cnMap(_.cnFlatten(array), rest);
+  Array.prototype.cnFlatMap = function(args) {
+    return this.cnFlatten().cnMap(arguments);
   };
 
-  // REVIEW: rest
   // cnCompact
 
-  _.cnCompact = function(array, indexs) {
-    var rest = arguments.slice(1);
-    return _.cnFilter(array, function(x) { return Number(x) !== 0; }, rest);
+  Object.prototype.cnCompact = function(indexs) {
+    return this.cnFilter(function(x) { return Number(x) !== 0; }; arguments);
   };
 
   // cnPluck
 
-  _.cnPluck = function(array, key, indexs) {
+  Object.prototype.cnPluck = function(key, indexs) {
     var others;
-    if (arguments.length > 2) {
-      others = Array.from(arguments).slice(2);
+    if (arguments.length > 1) {
+      others = Array.from(arguments).slice(1);
     }
-    return _.cnMap(array, function(x) {
+    return this.cnMap(function(x) {
       return x[key];
     }, others);
   };
@@ -444,13 +453,13 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
   // cnZip
   // REVIEW: adding indexs (others)
 
-  _.cnZip = function(array, index) {
-    var others, arrays = arguments[0];
-    if (arguments.length > 1 && arguments[1] !== undefined) {
-      others = Array.from(arguments).slice(2);
+  Object.prototype.cnZip = function(index) {
+    var others, arrays = this;
+    if (arguments.length > 0 && arguments[0] !== undefined) {
+      others = Array.from(arguments).slice(1);
     }
-    return _.cnMap(arrays[0], function(_, i) {
-      return _.cnMap(arrays, function(e) {
+    return arrays[0].cnMap(function(_, i) {
+      return arrays.cnMap(function(e) {
         return e[i];
       });
     });
@@ -459,13 +468,13 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
   // cnUnZip
   // REVIEW: adding indexs (others)
 
-  _.cnUnZip = function(array, index) {
+  Object.prototype.cnUnZip = function(index) {
     var others;
-    if (arguments.length > 1 && arguments[1] !== undefined) {
-      others = Array.from(arguments).slice(2);
+    if (arguments.length > 0 && arguments[0] !== undefined) {
+      others = Array.from(arguments).slice(1);
     }
-    return _.cnMap(array, function(e,i,a) {
-      return _.cnMap(e, function(x,y,z) {
+    return this.cnMap(function(e,i,a) {
+      return e.cnMap(function(x,y,z) {
         return a[y][i];
       });
     });
