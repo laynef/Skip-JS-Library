@@ -23,6 +23,12 @@ var root = typeof self == 'object' && self.self === self && self ||
 
 var prev = root._;
 
+var _ = function(obj) {
+  if (obj instanceof _) return obj;
+  if (!(this instanceof _)) return new _(obj);
+  this._wrapped = obj;
+};
+
 module.exports = {
 
   // cnPopOff
