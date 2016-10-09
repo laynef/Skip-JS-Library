@@ -113,7 +113,7 @@ module.exports = {
       var calls = arguments[1];
 
       if (arguments.length > 2) { others = Array.from(arguments).slice(2); }
-      cnForEach(array, function(e,i,a) {
+      _.cnForEach(array, function(e,i,a) {
         arr.push(calls(e,i,a));
       }, others);
       return arr;
