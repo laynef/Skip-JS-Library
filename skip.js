@@ -29,6 +29,15 @@ var _ = function(obj) {
   this._wrapped = obj;
 };
 
+if (typeof exports != 'undefined' && !exports.nodeType) {
+  if (typeof module != 'undefined' && !module.nodeType && module.exports) {
+    exports = module.exports = _;
+  }
+  exports._ = _;
+} else {
+  root._ = _;
+}
+
 module.exports = {
 
   // cnPopOff
@@ -455,7 +464,7 @@ module.exports = {
     if (arguments.length > 1 && arguments[1] !== undefined) {
       others = Array.from(arguments).slice(2);
     }
-    return _.cnMap(array, function(e,i,a) {
+    return cnMap(array, function(e,i,a) {
       return _.cnMap(e, function(x,y,z) {
         return a[y][i];
       });
