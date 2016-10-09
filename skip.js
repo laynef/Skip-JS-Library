@@ -115,7 +115,7 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
       if (arguments.length > 2) { others = Array.from(arguments).slice(2); }
       _.cnForEach(array, function(e,i,a) {
         arr.push(calls(e,i,a));
-      }; others);
+      }, others);
       return arr;
   };
 
@@ -129,7 +129,7 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
       if (calls(e,i,a)) {
         arr.push(e);
       }
-    }; others);
+    }, others);
     return arr;
   };
 
@@ -151,7 +151,7 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
     }
     return _.cnFilter(array, function(x) {
       return !calls(x);
-    }; others);
+    }, others);
   };
 
   // cnFlatten
@@ -202,7 +202,7 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
     }
     _.cnRightForEach(array, (function(e,i,a) {
       init = call(init, e, i, a);
-    }; others));
+    }, others));
     return init;
   };
 
@@ -216,7 +216,7 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
     }
     _.cnForEach(array, function(e,i,a) {
       init = call(init, e, i, a);
-    }; others);
+    }, others);
     return init;
   };
 
@@ -233,7 +233,7 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
       if (!call(e, i, a)) {
         bool = false;
       }
-    }; others);
+    }, others);
 
     return bool;
   };
@@ -256,7 +256,7 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
           return e;
         }
       }
-    }; others);
+    }, others);
 
     return undefined;
   };
@@ -270,7 +270,7 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
     }
     return _.cnFilter(array, function(ele, i, arr) {
       return arr.indexOf(ele) === i;
-    }; others);
+    }, others);
   };
 
   // cnSortedUniq
@@ -283,7 +283,7 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
     }
     return _.cnFilter(array, function(e,i,a) {
       return a.indexOf(e) === i;
-    }; others);
+    }, others);
   };
 
   // cnChunk
@@ -339,7 +339,7 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
       return _.cnFilter(acc, function(e) {
         return item.indexOf(e) > -1;
       });
-    }; [], others);
+    }, [], others);
   };
 
   // cnDifference
@@ -354,7 +354,7 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
       return _.cnFilter(acc, function(e) {
         return item.indexOf(e) === -1;
       });
-    }; [], others);
+    }, [], others);
   };
 
   // cnUnion
@@ -372,7 +372,7 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
         }
       });
       return acc;
-    }; [], others);
+    }, [], others);
   };
 
   // cnRandomShuffle
@@ -425,7 +425,7 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
 
   _.cnCompact = function(array, indexs) {
     var rest = arguments.slice(1);
-    return _.cnFilter(array, function(x) { return Number(x) !== 0; }; rest);
+    return _.cnFilter(array, function(x) { return Number(x) !== 0; }, rest);
   };
 
   // cnPluck
@@ -437,7 +437,7 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
     }
     return _.cnMap(array, function(x) {
       return x[key];
-    }; others);
+    }, others);
   };
 
 
@@ -469,8 +469,6 @@ if (typeof exports != 'undefined' && !exports.nodeType) {
         return a[y][i];
       });
     });
-  }
-
-};
+  };
 
 }());
