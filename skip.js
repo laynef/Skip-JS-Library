@@ -20,10 +20,6 @@ To chain with others
 
 (function() {
 
-  var asdf = function(x) {
-    console.log(x);
-  }
-
   // cnClear
 
   Object.prototype.cnClear = function() {
@@ -70,7 +66,7 @@ To chain with others
       return this;
     } else {
       var temp = this;
-      var front = temp.splice(0, index-1);
+      var front = temp.splice(0, index);
       var end = temp.splice(0);
 
       front.push(item);
@@ -88,7 +84,6 @@ To chain with others
     if (arguments.length > 1 && arguments[1] !== undefined) {
       args = Array.from(arguments).slice(1);
     }
-
 
     if (this.constructor !== Object) {
       for (var i = 0; i < this.length; i++) {
@@ -110,11 +105,6 @@ To chain with others
 
   };
 
-  asdf([1,2,3,4].cnForEach(function(x) {
-    console.log(x*2);
-
-  }, 2));
-
   // cnRightForEach
 
   Array.prototype.cnRightForEach = function(callback, indexs) {
@@ -126,7 +116,7 @@ To chain with others
     for (var i = this.length-1; i >= 0; i--) {
       if (args.length === 0) {
         call(this[i], i, this);
-      } else if (args.includes(i)) {
+      } else if (!args.includes(i)) {
         call(this[i], i, this);
       }
     }
