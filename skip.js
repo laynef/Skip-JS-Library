@@ -465,7 +465,6 @@ To chain with others
     }
     this.sForEach(function(x) {
       res.push(x);
-      console.log(x);
     }, others);
     return res;
   };
@@ -491,7 +490,7 @@ To chain with others
 
   // sUnZip
   // only one index
-  
+
   Object.prototype.sUnZip = function(index) {
     var others, arr = this;
     if (arguments.length > 0 && arguments[0] !== undefined) {
