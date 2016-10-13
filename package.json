@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lfaler/plainJS_JS-Library.git"
+    "url": "git+https://github.com/laynefaler/Skip-JS-Library.git"
   },
   "author": "Layne Faler <laynefaler>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lfaler/plainJS_JS-Library/issues"
+    "url": "https://github.com/laynefaler/Skip-JS-Library/issues"
   },
-  "homepage": "https://github.com/lfaler/plainJS_JS-Library#readme",
+  "homepage": "https://github.com/laynefaler/Skip-JS-Library#readme",
   "file": [
     "skip.js"
   ]
