@@ -3,7 +3,7 @@
 * @Date:   09-09-2016
 * @Email:  laynefaler@gmail.com
 * @Last modified by:   laynefaler
-* @Last modified time: 10-09-2016
+* @Last modified time: 10-25-2016
 */
 
 /*
@@ -18,7 +18,6 @@ To chain with others
 */
 
 
-(function() {
 
   // sClear
 
@@ -502,5 +501,3 @@ To chain with others
       });
     });
   };
-
-}());
