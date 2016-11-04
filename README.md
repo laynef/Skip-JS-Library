@@ -3,8 +3,11 @@
 @Date:   09-09-2016
 @Email:  laynefaler@gmail.com
 @Last modified by:   laynefaler
-@Last modified time: 10-09-2016
+@Last modified time: 11-04-2016
 -->
+
+  # Under Construction
+  Any contributions are welcomed!
 
     ____    __                                    
     /\  _`\ /\ \      __              __           
@@ -15,6 +18,7 @@
        \/_____/\/_/\/_/\/_/\ \ \/\/_/\ \_\ \/___/
                             \ \_\   \ \____/      
                              \/_/    \/___/  
+
 
 ## Skip JavaScript Library
 
